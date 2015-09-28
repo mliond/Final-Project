@@ -1,0 +1,13 @@
+<h1>Edit item <%= @item.id %></h1>
+
+<%= form_for @item, html: {id: "edit-item"} do |f| %>
+  <%= f.hidden_field :id %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <%= f.label :location %>
+  <%= f.text_field :location %>
+  <%= f.label :claimed %>
+  <%= f.check_box :claimed %>
+  <%= f.submit :submit %>
+<% end %>
+

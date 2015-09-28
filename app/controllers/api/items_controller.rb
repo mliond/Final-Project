@@ -1,19 +1,29 @@
 class Api::ItemsController < ApplicationController
 
   def index
-    file = File.read('tmp/google.json')
-    data_hash = JSON.parse(file)
-    # render json: data_hash
-    string = ""
+    featuresArray = []
     Item.all.each do |i|
-      string += '{'
-      string += "'type': 'Feature',"
-      string += "'geometry': {'type': 'Point', 'coordinates': [#{i.latitude}, #{i.longitude}]}"
-      string += '}'
+      eachItem = {type: "Feature", geometry: {type: "Point", coordinates: [i.longitude, i.latitude]}}
+      featuresArray << eachItem
     end
+    render json: {"type": "FeatureCollection", "features": featuresArray}
+  end
 
-    render json: {"type": "FeatureCollection", "features": ["type": "Feature", "geometry": {"type": "Point", "coordinates": [2.1772565, 41.3917816]}]}
-    # render json: {"type": "FeatureCollection", "features": [string]}
+  def create
+    item = Item.create(item_params)
+    render json: item
+  end
+
+  def update
+    item = Item.find(params[:id])
+    item.update(item_params)
+    render json: item
+  end
+
+  private
+
+  def item_params
+    params.require(:item).permit(:name, :location, :claimed)
   end
 
 end

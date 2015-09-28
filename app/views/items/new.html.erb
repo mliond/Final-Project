@@ -1,0 +1,10 @@
+<h1>Create new item <%= @item.id %></h1>
+
+<%= form_for @item, html: {id: "new-item"} do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <%= f.label :location %>
+  <%= f.text_field :location %>
+  <%= f.submit :submit %>
+<% end %>
+

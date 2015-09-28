@@ -15,7 +15,7 @@
 //= require turbolinks
 //= require_tree .
 
-var my_location = new Location; 
+var my_location = new Location;
 var position = my_location.locate_user();
 
 function initMap() {
