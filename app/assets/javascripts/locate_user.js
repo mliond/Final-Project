@@ -13,8 +13,8 @@ Location.prototype.locate_user = function() {
 Location.prototype.onLocation = function(position) {
   // console.log('your lat is ' + position.coords.latitude);
   // console.log('your lon is ' + position.coords.longitude);
-  console.log(position);
-  return position.coords;
+  // console.log(position);
+  Location.coords = position.coords;
 };
 
 Location.prototype.onError = function(error) {

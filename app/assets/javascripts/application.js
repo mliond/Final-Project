@@ -19,7 +19,6 @@ var my_location = new Location;
 var position = my_location.locate_user();
 
 function initMap() {
-  var map = new Map(position);
+  var map = new Map();
   map.initMap();
 }
-
