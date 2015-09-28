@@ -14,4 +14,16 @@ Map.prototype.initMap = function() {
     // icon: 'http://findicons.com/files/icons/1580/devine_icons_part_2/128/trash_recyclebin_empty_closed.png',
     clickable: true
   });
+
+  // map.data.addListener('click', function(event) {
+  //   // map.data.setStyle({visible: false});
+  //   event.feature.StyleOptions('visible', false);
+  // })
+
+
+  //   // document.getElementById('info-box').textContent =
+  //   //     event.feature.getProperty('letter');
+
+
+
 }

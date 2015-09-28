@@ -22,3 +22,4 @@ function initMap() {
   var map = new Map(position);
   map.initMap();
 }
+
