@@ -20,19 +20,18 @@ Map.prototype.initMap = function() {
      title: 'Click to zoom'
    });
 
-  // map.data.addListener('click', function(event) {
-  //   // map.data.setStyle({visible: false});
-  //   $('h5.item-name').text('1');
-  //   $('h5.item-description').text('2');
-  //   $('h5.item-location').text('3');
-  //   $('h5.item-created_at').text('4');
-  // })
-
   map.data.addListener('click', function(event) {
-      $('h5.item-name').text(event.feature.getProperty('name'));
-      $('h5.item-description').text(event.feature.getProperty('description'));
-      $('h5.item-location').text(event.feature.getProperty('location'));
-      $('h5.item-created_at').text(event.feature.getProperty('created_at'));
+      $('h5#item-name').text(event.feature.getProperty('name'));
+      $('h5#item-description').text(event.feature.getProperty('description'));
+      $('h5#item-location').text(event.feature.getProperty('location'));
+      $('h5#item-created_at').text(event.feature.getProperty('created_at'));
+      $('h5#item-claimed').text(event.feature.getProperty('claimed'));
+      $('h5#item-id').text(event.feature.getProperty('id'));
+      if($('h5#item-claimed').text() === 'false') {
+        $('button#claim-button').css('display', 'block');
+      } else {
+        $('button#claim-button').css('display', 'none');
+      };
     });
 
 

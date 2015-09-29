@@ -21,3 +21,10 @@
   width: 80%;
  }
 
+ h5#item-claimed, h5#item-id {
+  display: none; 
+ }
+
+button#claim-button {
+  display: none;
+}

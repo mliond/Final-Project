@@ -2,7 +2,7 @@ class Api::ItemsController < ApplicationController
 
   def index
     featuresArray = Item.all.each_with_object([]) do |i, array|
-      array << {type: "Feature", properties: {name: i.name, description: i.description, location: i.location, location: i.location, created_at: i.created_at, claimed: i.claimed}, geometry: {type: "Point", coordinates: [i.longitude, i.latitude]}}
+      array << {type: "Feature", properties: {id: i.id, name: i.name, description: i.description, location: i.location, location: i.location, created_at: i.created_at.strftime("%D - %T"), claimed: i.claimed}, geometry: {type: "Point", coordinates: [i.longitude, i.latitude]}}
     end
     render json: {"type": "FeatureCollection", "features": featuresArray}
   end
