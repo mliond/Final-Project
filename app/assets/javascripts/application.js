@@ -15,10 +15,16 @@
 //= require turbolinks
 //= require_tree .
 
-var my_location = new Location;
-var position = my_location.locate_user();
+var myLocation = new Location;
+var position = myLocation.locateUser();
 
-function initMap() {
-  var map = new Map();
-  map.initMap();
-}
+$(document).ready(function(){
+   var s = document.createElement("script");
+   s.type = "text/javascript";
+   s.src  = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAhrCvig_rV3F4_cO9FUSNpB4eXOE1UMOQ&sensor=true&callback=gmap_draw";
+   window.gmap_draw = function(){
+       var map = new Map;
+       map.initMap();
+   };
+   $("head").append(s);  
+});
