@@ -26,6 +26,9 @@ Map.prototype.initMap = function() {
   });
 
   map.data.addListener('click', function(event) {
+    // Hide all the stuff below in the putinDOM function
+    // var myObj = new Item(event.feature);
+    // myObj.putInDOM();
     $('h5#item-name').text(event.feature.getProperty('name'));
     $('img#item-image').attr('src', event.feature.getProperty('image'));
     $('img#item-image').css('display', 'block');
