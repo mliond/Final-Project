@@ -44,9 +44,15 @@ Map.prototype.initMap = function() {
 
   var map = new google.maps.Map(document.getElementById('map'), mapOptions);
   map.data.loadGeoJson('/api/items');
-  map.data.setStyle({
-    icon: 'https://www.google.com/mapfiles/marker_green.png',
-    clickable: true
+  map.data.setStyle(function(feature) {
+    var icon = 'https://www.google.com/mapfiles/marker_black.png';
+    if(feature.getProperty('isColorful')) {
+      icon = 'https://www.google.com/mapfiles/marker_green.png';
+    }
+    return {
+      clickable: true,
+      icon: icon
+    };
   });
 
   map.data.addListener('click', function(event) {
