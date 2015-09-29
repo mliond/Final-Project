@@ -28,3 +28,9 @@
 button#claim-button {
   display: none;
 }
+
+img#item-image {
+  display: none;;
+  max-height: 300px;
+  width: 100%;
+}

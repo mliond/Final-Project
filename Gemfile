@@ -35,8 +35,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Localization through Geocoder
 gem 'geocoder'
 
-# Picture through Paperclip
+# Picture through Paperclip and remotipart
 gem "paperclip", "~> 4.3"
+gem 'remotipart', '~> 1.2.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
