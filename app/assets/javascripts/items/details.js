@@ -8,5 +8,5 @@ $('button#claim-button').on('click', function() {
     data: {item: {claimed: itemClaimed}}
   });
 
-  $('button#claim-button').css('display', 'none');
+  $('button#claim-button').hide();
 })
