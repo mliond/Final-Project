@@ -15,5 +15,3 @@
 //= require turbolinks
 //= require_tree .
 
-var myLocation = new Location;
-var position = myLocation.locateUser();

@@ -1,3 +1,4 @@
+
 // Gmaps Key: AIzaSyAhrCvig_rV3F4_cO9FUSNpB4eXOE1UMOQ
 
 // if browser supports this, geolocate
@@ -21,6 +22,13 @@ Location.prototype.onError = function(error) {
   console.log(error);
 };
 
+$(document).ready(function(){
+  if(!(Location.coords)){
+    var myLocation = new Location;
+    var position = myLocation.locateUser();
+  }
+})
+
 // once page is loaded, start map
 $(document).ready(function(){
    var s = document.createElement("script");
@@ -33,6 +41,10 @@ $(document).ready(function(){
    $("head").append(s);
 });
 
+var Map = function () {
+  this.currentId = 0; 
+};
+
 Map.prototype.initMap = function() {
   var lat = Location.coords.latitude;
   var lng = Location.coords.longitude;
@@ -43,7 +55,48 @@ Map.prototype.initMap = function() {
   };
 
   var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-  map.data.loadGeoJson('/api/items');
+
+
+  // Alternative: Load JSON and make a marker for each object. Just has position so far
+  //       var promise = $.getJSON("/api/items");
+  //             promise.then(function(data){
+  //               cachedGeoJson = data; 
+
+  // // Make Markers out of the data
+  //            for (var i = 0; i < cachedGeoJson.features.length; i++) {
+  //              var coords = cachedGeoJson.features[i].geometry.coordinates;
+  //              var latLng = new google.maps.LatLng(coords[1],coords[0]);
+  //              var marker = new google.maps.Marker({
+  //                position: latLng,
+  //                clickable: true,
+  //                icon: 'https://www.google.com/mapfiles/marker_black.png',
+  //                title: 'test',
+  //                map: map
+  //              });
+  //              console.log(marker.getAttribution('title'));
+
+  //              marker.addListener('click', function() {
+  //                  map.setZoom(19);
+  //                  map.setCenter(marker.getPosition());
+  //                  marker.setStyle({
+  //                   icon: 'https://www.google.com/mapfiles/marker_black.png'
+  //                 });
+  //                });
+  //            };
+  //          });
+
+
+
+
+
+
+  // Load JSON data
+  var promise = $.getJSON("/api/items");
+        promise.then(function(data){
+          cachedGeoJson = data; //save the geojson in case we want to update its values
+          map.data.addGeoJson(cachedGeoJson,{idPropertyName:"id"}); 
+        });
+
   map.data.setStyle(function(feature) {
     var icon = 'https://www.google.com/mapfiles/marker_black.png';
     if(feature.getProperty('isColorful')) {
@@ -55,10 +108,22 @@ Map.prototype.initMap = function() {
     };
   });
 
+  var currentId = 0;
+
   map.data.addListener('click', function(event) {
+    changeDom(event);
+    if(!(currentId === event.feature.getId())){
+      if(!(currentId === 0)){
+        var prevFeature = map.data.getFeatureById(currentId);
+        prevFeature.setProperty('isColorful', false);
+      }
+      currentId = event.feature.getId();
+    }
+    event.feature.setProperty('isColorful', true);
+    });
+
+  function changeDom(event) {
     var putInDom = new ChangeDom(event.feature);
     putInDom.putOnPage();
-    event.feature.setProperty('isColorful', true);
-    // event.feature.setIcon('https://www.google.com/mapfiles/marker_green.png');
-  });
+  }
 }
