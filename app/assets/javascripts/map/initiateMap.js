@@ -51,10 +51,13 @@ Map.prototype.initMap = function() {
 
   var mapOptions = {
       center: {lat: lat, lng: lng},
-      zoom: 15
+      zoom: 15,
+      streetViewControl: false,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      mapTypeControl: false
   };
 
-  var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+  var map = new google.maps.Map(document.getElementById('map-index'), mapOptions);
 
 
   // Alternative: Load JSON and make a marker for each object. Just has position so far
@@ -91,36 +94,50 @@ Map.prototype.initMap = function() {
 
 
   // Load JSON data
+  // var promise = $.getJSON("/api/items");
+  //       promise.then(function(data){
+  //         cachedGeoJson = data; //save the geojson in case we want to update its values
+  //         map.data.addGeoJson(cachedGeoJson,{idPropertyName:"id"}); 
+  //       }); 
+
+  // Load JSON data
   var promise = $.getJSON("/api/items");
         promise.then(function(data){
           cachedGeoJson = data; //save the geojson in case we want to update its values
-          map.data.addGeoJson(cachedGeoJson,{idPropertyName:"id"}); 
+          layer_1 = new google.maps.Data();
+          layer_1.addGeoJson(cachedGeoJson,{idPropertyName:"id"}); 
+          layer_1.setMap(map);
+
+          // Set style for icons
+          layer_1.setStyle(function(feature) {
+            if(feature.getProperty('claimed') === true) {
+              var icon = 'http://google.com/mapfiles/ms/micons/' + 'ltblue-dot' + '.png';
+            } else {
+              var icon = 'http://google.com/mapfiles/ms/micons/' + 'blue-dot' + '.png';
+            }
+            if(feature.getProperty('isColorful')) {
+              var icon = 'http://google.com/mapfiles/' + 'arrow' + '.png';
+            }
+            return {
+              clickable: true,
+              icon: icon
+            };
+          });
+
+          // Add listener for DOM manipulation
+          var currentId = 0;
+          layer_1.addListener('click', function(event) {
+            changeDom(event);
+            if(!(currentId === event.feature.getId())){
+              if(!(currentId === 0)){
+                var prevFeature = layer_1.getFeatureById(currentId);
+                prevFeature.setProperty('isColorful', false);
+              }
+              currentId = event.feature.getId();
+            }
+            event.feature.setProperty('isColorful', true);
+          });
         });
-
-  map.data.setStyle(function(feature) {
-    var icon = 'https://www.google.com/mapfiles/marker_black.png';
-    if(feature.getProperty('isColorful')) {
-      icon = 'https://www.google.com/mapfiles/marker_green.png';
-    }
-    return {
-      clickable: true,
-      icon: icon
-    };
-  });
-
-  var currentId = 0;
-
-  map.data.addListener('click', function(event) {
-    changeDom(event);
-    if(!(currentId === event.feature.getId())){
-      if(!(currentId === 0)){
-        var prevFeature = map.data.getFeatureById(currentId);
-        prevFeature.setProperty('isColorful', false);
-      }
-      currentId = event.feature.getId();
-    }
-    event.feature.setProperty('isColorful', true);
-    });
 
   function changeDom(event) {
     var putInDom = new ChangeDom(event.feature);
