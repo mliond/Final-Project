@@ -102,8 +102,6 @@ Map.prototype.initMap = function() {
   //       }); 
 
   // Load JSON data
-
-
   var promise = $.getJSON("/api/items");
         promise.then(function(data){
           cachedGeoJson = data; //save the geojson in case we want to update its values
