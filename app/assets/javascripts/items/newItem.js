@@ -2,9 +2,6 @@ $('a#new-button').on('click', function(event) {
   event.preventDefault();
   $('div#item-info').hide();
   $('div#new-item').show();
-  $('div#map-index').hide();
-  $('div#map-new-item').show();
-  
 });
 
 $('form#new-item').on('submit', function(event) {
@@ -31,6 +28,4 @@ $('form#new-item').on('submit', function(event) {
   $('input#item_image').val("");
   $('div#new-item').hide();
   $('div#item-info').show();
-  $('div#map-new-item').hide();
-  $('div#map-index').show();
 })

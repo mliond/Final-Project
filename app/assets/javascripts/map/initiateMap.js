@@ -48,6 +48,7 @@ var Map = function () {
 Map.prototype.initMap = function() {
   var lat = Location.coords.latitude;
   var lng = Location.coords.longitude;
+  var mapDiv = document.getElementById('map-index');
 
   var mapOptions = {
       center: {lat: lat, lng: lng},
@@ -57,7 +58,7 @@ Map.prototype.initMap = function() {
       mapTypeControl: false
   };
 
-  var map = new google.maps.Map(document.getElementById('map-index'), mapOptions);
+  var map = new google.maps.Map(mapDiv, mapOptions);
 
 
   // Alternative: Load JSON and make a marker for each object. Just has position so far
@@ -137,7 +138,14 @@ Map.prototype.initMap = function() {
             }
             event.feature.setProperty('isColorful', true);
           });
+
+          var newButton = document.getElementById('new-button');
+          google.maps.event.addDomListener(newButton, 'click', function() {
+            layer_1.setMap(null);
+            });
+          
         });
+
 
   function changeDom(event) {
     var putInDom = new ChangeDom(event.feature);
