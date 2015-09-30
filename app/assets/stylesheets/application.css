@@ -33,3 +33,7 @@ img#item-image {
   max-height: 300px;
   width: 100%;
 }
+
+div#new-item, div#map-new-item {
+  display: none;
+}
