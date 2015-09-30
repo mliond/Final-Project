@@ -102,15 +102,25 @@ Map.prototype.initMap = function() {
   //       }); 
 
   // Load JSON data
+
+
   var promise = $.getJSON("/api/items");
         promise.then(function(data){
           cachedGeoJson = data; //save the geojson in case we want to update its values
-          layer_1 = new google.maps.Data();
-          layer_1.addGeoJson(cachedGeoJson,{idPropertyName:"id"}); 
-          layer_1.setMap(map);
+          dataLayer = new google.maps.Data();
+          dataLayer.addGeoJson(cachedGeoJson,{idPropertyName:"id"}); 
+          toggleDataLayer(true);
+
+          function toggleDataLayer(input) {
+            if(input === true){
+              dataLayer.setMap(map);
+            } else {
+              dataLayer.setMap(null);
+            };
+          };
 
           // Set style for icons
-          layer_1.setStyle(function(feature) {
+          dataLayer.setStyle(function(feature) {
             if(feature.getProperty('claimed') === true) {
               var icon = 'http://google.com/mapfiles/ms/micons/' + 'ltblue-dot' + '.png';
             } else {
@@ -127,11 +137,11 @@ Map.prototype.initMap = function() {
 
           // Add listener for DOM manipulation
           var currentId = 0;
-          layer_1.addListener('click', function(event) {
+          dataLayer.addListener('click', function(event) {
             changeDom(event);
             if(!(currentId === event.feature.getId())){
               if(!(currentId === 0)){
-                var prevFeature = layer_1.getFeatureById(currentId);
+                var prevFeature = dataLayer.getFeatureById(currentId);
                 prevFeature.setProperty('isColorful', false);
               }
               currentId = event.feature.getId();
@@ -143,28 +153,46 @@ Map.prototype.initMap = function() {
           var newButton = $('a#new-button')[0];
 
           google.maps.event.addDomListener(newButton, 'click', function() {
-            layer_1.setMap(null);
+            toggleDataLayer(false);
             var marker = new google.maps.Marker({
               position: {lat: lat, lng: lng},
-              map: map,
               icon: 'http://google.com/mapfiles/ms/micons/' + 'blue-dot' + '.png',
               draggable: true,
               title:"Drag me!"
             });
+
+            function toggleMarker(input){
+              if(input === true){
+                marker.setMap(map);
+              } else {
+                marker.setMap(null);
+              };
+            };
+
+            toggleMarker(true);
+
             var submitButton = $('form#new-item')[0];
             marker.addListener('dragend', function() {
-            // google.maps.event.addDomListener(submitButton, 'click', function() {
               var locat = marker.getPosition();
 
-              // Reverse geocode the new location
+              // Reverse geocode the new location and put in DOM
               var geocoder = new google.maps.Geocoder;
               geocoder.geocode( { 'location': locat}, function(results) {
                 var result = results[0].formatted_address;
-                console.log(result);
                 $('input#item_location').val(result);
               });
             });
+
+            // Remove marker, go back to Data view
+            var submitForm = $('form#new-item')[0];
+            google.maps.event.addDomListener(submitForm, 'submit', function() {
+              toggleDataLayer(true);
+              toggleMarker(false);
+            })
+
           });
+
+
         });
 
 
