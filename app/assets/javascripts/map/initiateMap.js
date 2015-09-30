@@ -139,11 +139,32 @@ Map.prototype.initMap = function() {
             event.feature.setProperty('isColorful', true);
           });
 
-          var newButton = document.getElementById('new-button');
+          // When hitting the new button, remove data layer, add draggable marker
+          var newButton = $('a#new-button')[0];
+
           google.maps.event.addDomListener(newButton, 'click', function() {
             layer_1.setMap(null);
+            var marker = new google.maps.Marker({
+              position: {lat: lat, lng: lng},
+              map: map,
+              icon: 'http://google.com/mapfiles/ms/micons/' + 'blue-dot' + '.png',
+              draggable: true,
+              title:"Drag me!"
             });
-          
+            var submitButton = $('form#new-item')[0];
+            marker.addListener('dragend', function() {
+            // google.maps.event.addDomListener(submitButton, 'click', function() {
+              var locat = marker.getPosition();
+
+              // Reverse geocode the new location
+              var geocoder = new google.maps.Geocoder;
+              geocoder.geocode( { 'location': locat}, function(results) {
+                var result = results[0].formatted_address;
+                console.log(result);
+                $('input#item_location').val(result);
+              });
+            });
+          });
         });
 
 

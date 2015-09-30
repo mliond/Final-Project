@@ -12,7 +12,7 @@
           <h5 id="item-claimed">Claimed</h5>
           <button id="claim-button" class="btn btn-default">Claim!</button>
         </div>
-        <div id="new-button">
+        <div id="wrapper-new-button">
           <a id="new-button" class="btn btn-default">New!</a>
         </div>
       </div>
@@ -27,7 +27,7 @@
           <%= f.label :location %>
           <%= f.text_field :location %>
           <%= f.file_field :image %>
-          <%= f.submit :submit %>
+          <%= f.submit :submit, html: {id: "submit-item"} %>
         <% end %>
       </div>
     </div>
