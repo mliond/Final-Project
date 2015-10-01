@@ -37,3 +37,7 @@ img#item-image {
 div#new-item, div#map-new-item {
   display: none;
 }
+
+.pac-container {
+  background-color: white;
+}

@@ -40,7 +40,7 @@ function locateUser() {
 function initializeMap() {
   var s = document.createElement("script");
   s.type = "text/javascript";
-  s.src  = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAhrCvig_rV3F4_cO9FUSNpB4eXOE1UMOQ&sensor=true&callback=gmap_draw";
+  s.src  = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAhrCvig_rV3F4_cO9FUSNpB4eXOE1UMOQ&sensor=true&callback=gmap_draw&libraries=places";
   window.gmap_draw = function(){
     var map = new Map;
     map.initMap();
@@ -216,19 +216,6 @@ Map.prototype.initMap = function() {
     });
   }
 
-  function styleMarker2(marker) {
-    var locationInput = $('input#item_location')[0];
-    google.maps.event.addDomListener(locationInput, 'input', function() {
-      var input = $('input#item_location').val();
-      var geocoder = new google.maps.Geocoder;
-      var myBounds = map.getBounds();
-      geocoder.geocode( {address: input, bounds: myBounds}, function(results) {
-        var result = results[0].geometry.location;
-        marker.setPosition(result);
-      });
-    });
-  }
-
   // When clicking the new button, remove data layer, add draggable marker
   var newButton = $('a#new-button')[0];
   google.maps.event.addDomListener(newButton, 'click', function() {
@@ -237,7 +224,6 @@ Map.prototype.initMap = function() {
     Map.marker = createNewMarker();
     toggleMarker(true);
     styleMarker(Map.marker);
-    styleMarker2(Map.marker);
   })
 
   // When submitting the form, remove marker, show data layer
@@ -247,4 +233,9 @@ Map.prototype.initMap = function() {
     toggleIdleListener(true);
     toggleMarker(false);
   });
-}
+
+  // initialize Autocomplete in the location input
+  var locationInput = $('input#item_location')[0];
+  var options = {bounds: map.getBounds()}
+  autocomplete = new google.maps.places.Autocomplete(locationInput, options);
+};
