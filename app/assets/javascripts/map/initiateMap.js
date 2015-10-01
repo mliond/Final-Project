@@ -1,16 +1,16 @@
-
 // Gmaps Key: AIzaSyAhrCvig_rV3F4_cO9FUSNpB4eXOE1UMOQ
 
-// if browser supports this, geolocate
+// Geolocation Object
 var Location = function () {
   this.options = {enableHighAccuracy: true};
 };
 
+// if browser supports this, geolocate
 Location.prototype.locateUser = function() {
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(this.onLocation, this.onError, this.options);
   } else {
-    console.log('geo is not available')
+    this.onError('no browser support');
   }
 }
 
@@ -29,7 +29,177 @@ $(document).ready(function(){
   }
 })
 
-// once page is loaded, start map
+// Map Object
+var Map = function () {
+  this.currentId = 0; 
+  this.lat = Location.coords.latitude; // geolocation from before
+  this.lng = Location.coords.longitude; // geolocation from before
+  this.mapDiv = document.getElementById('map-index');
+  var noPlaces = [ // no POI style for below
+  {
+      featureType: "poi",
+      stylers: [
+        { visibility: "off" }
+      ]
+    },
+  {
+      featureType: "transit",
+      stylers: [
+        { visibility: "off" }
+      ]
+    }
+  ];
+  this.mapOptions = { // several options for the initial map
+    center: {lat: this.lat, lng: this.lng},
+    zoom: 15,
+    streetViewControl: false,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    mapTypeControl: false,
+    scrollwheel: false,
+    styles: noPlaces
+  };
+};
+
+Map.prototype.initMap = function() {
+  var map = new google.maps.Map(this.mapDiv, this.mapOptions);
+
+  // Show or hide data layer
+  function toggleDataLayer(command) {
+    if(command === true){
+      Map.dataLayer.setMap(map);
+    } else {
+      Map.dataLayer.setMap(null);
+    };
+  };
+
+  // Set style for layer's icons
+  function styleDataLayer() {
+    Map.dataLayer.setStyle(function(feature) {
+      if(feature.getProperty('claimed') === true) {
+        var icon = 'http://google.com/mapfiles/ms/micons/' + 'ltblue-dot' + '.png';
+      } else {
+        var icon = 'http://google.com/mapfiles/ms/micons/' + 'blue-dot' + '.png';
+      }
+      if(feature.getProperty('isColorful')) {
+        var icon = 'http://google.com/mapfiles/ms/micons/' + 'yellow-dot' + '.png';
+      }
+      return {
+        clickable: true,
+        icon: icon
+      };
+    });
+  };
+
+  // Dom manipulation
+  function changeDom(event) {
+    var putInDom = new ChangeDom(event.feature);
+    putInDom.putOnPage();
+  }
+
+  // Add listener for DOM manipulation on click
+  function domStyleDataLayer() {
+    var currentId = 0;
+    Map.dataLayer.addListener('click', function(event) {
+      changeDom(event);
+      if(!(currentId === event.feature.getId())){
+        if(!(currentId === 0)){
+          var prevFeature = Map.dataLayer.getFeatureById(currentId);
+          prevFeature.setProperty('isColorful', false);
+        }
+        currentId = event.feature.getId();
+      }
+      event.feature.setProperty('isColorful', true);
+    });
+  };
+
+  // This creates a data layer on the map
+  function showDataLayer(data) {
+    Map.dataLayer = new google.maps.Data();
+    Map.dataLayer.addGeoJson(data,{idPropertyName:"id"}); 
+    toggleDataLayer(true);
+    styleDataLayer();
+    domStyleDataLayer();
+  }
+
+  // Load markers in the viewport from API
+  function loadPoints() {
+    if(Map.dataLayer) {
+      toggleDataLayer(false);
+    }
+    var bounds = map.getBounds().toUrlValue();
+    var data = $.ajax({
+      dataType: "json",
+      url: '/api/view',
+      data: {viewport: bounds},
+      async: false, // needs to load first
+      success: showDataLayer
+    });
+  };
+
+  function toggleIdleListener(command) {
+    var listener = map.addListener('idle', loadPoints);
+    if(command === false){
+      map.clearListeners('idle')
+    };
+  };
+
+  // This event is fired when the map becomes idle after panning or zooming.
+  toggleIdleListener(true);
+
+  function createNewMarker() {
+    var marker = new google.maps.Marker({
+      position: {lat: Location.coords.latitude, lng: Location.coords.longitude},
+      icon: 'http://google.com/mapfiles/ms/micons/' + 'blue-dot' + '.png',
+      draggable: true,
+      title:"Drag me!"
+    });
+    return marker
+  }
+
+  // show or hide specified marker
+  function toggleMarker(command) {
+    if(command === true){
+      Map.marker.setMap(map);
+    } else {
+      Map.marker.setMap(null);
+    };
+  }
+
+  // takes marker's location and puts its address in DOM
+  function reverseGeocode(coordinates) {
+    var geocoder = new google.maps.Geocoder;
+    geocoder.geocode( { 'location': coordinates}, function(results) {
+      var result = results[0].formatted_address;
+      $('input#item_location').val(result);
+    });
+  }
+
+  function styleMarker(marker) {
+    marker.addListener('dragend', function() {
+      var locat = marker.getPosition();
+      reverseGeocode(locat);
+    });
+  }
+
+  // When clicking the new button, remove data layer, add draggable marker
+  var newButton = $('a#new-button')[0];
+  google.maps.event.addDomListener(newButton, 'click', function() {
+    toggleDataLayer(false);
+    toggleIdleListener(false);
+    Map.marker = createNewMarker();
+    toggleMarker(true);
+    styleMarker(Map.marker);
+  })
+
+  // When submitting the form, remove marker, show data layer
+  var submitForm = $('form#new-item')[0];
+  google.maps.event.addDomListener(submitForm, 'submit', function() {
+    toggleDataLayer(true);
+    toggleMarker(false);
+  });
+}
+
+// Initialize Map
 $(document).ready(function(){
    var s = document.createElement("script");
    s.type = "text/javascript";
@@ -40,204 +210,3 @@ $(document).ready(function(){
    };
    $("head").append(s);
 });
-
-var Map = function () {
-  this.currentId = 0; 
-};
-
-Map.prototype.initMap = function() {
-  var lat = Location.coords.latitude;
-  var lng = Location.coords.longitude;
-  var mapDiv = document.getElementById('map-index');
-
-  var mapOptions = {
-    center: {lat: lat, lng: lng},
-    zoom: 15,
-    streetViewControl: false,
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-    mapTypeControl: false,
-    scrollwheel: false
-  };
-
-  var map = new google.maps.Map(mapDiv, mapOptions);
-
-  // Turns off POI + Transit
-  var noPlaces = [
-  {
-      featureType: "poi",
-      stylers: [
-        { visibility: "off" }
-      ]   
-    },
-  {
-      featureType: "transit",
-      stylers: [
-        { visibility: "off" }
-      ]   
-    }
-  ];
-  map.setOptions({styles: noPlaces});
-
-  // This event is fired when the map becomes idle after panning or zooming.
-  map.addListener('idle', showMarkers);
-
-  function showMarkers() {
-    var bounds = map.getBounds().toUrlValue();
-    console.log(bounds);
-    $.ajax({
-      dataType: "json",
-      url: '/api/view',
-      data: {viewport: bounds},
-      success: console.log('done')
-    });
-  
-
-
-    // marker.setMap(null)
-    // marker.setMap(map)
-  }
-
-
-  // Alternative: Load JSON and make a marker for each object. Just has position so far
-  //       var promise = $.getJSON("/api/items");
-  //             promise.then(function(data){
-  //               cachedGeoJson = data; 
-
-  // // Make Markers out of the data
-  //            for (var i = 0; i < cachedGeoJson.features.length; i++) {
-  //              var coords = cachedGeoJson.features[i].geometry.coordinates;
-  //              var latLng = new google.maps.LatLng(coords[1],coords[0]);
-  //              var marker = new google.maps.Marker({
-  //                position: latLng,
-  //                clickable: true,
-  //                icon: 'https://www.google.com/mapfiles/marker_black.png',
-  //                title: 'test',
-  //                map: map
-  //              });
-  //              console.log(marker.getAttribution('title'));
-
-  //              marker.addListener('click', function() {
-  //                  map.setZoom(19);
-  //                  map.setCenter(marker.getPosition());
-  //                  marker.setStyle({
-  //                   icon: 'https://www.google.com/mapfiles/marker_black.png'
-  //                 });
-  //                });
-  //            };
-  //          });
-
-
-
-
-
-
-  // Load JSON data
-  // var promise = $.getJSON("/api/items");
-  //       promise.then(function(data){
-  //         cachedGeoJson = data; //save the geojson in case we want to update its values
-  //         map.data.addGeoJson(cachedGeoJson,{idPropertyName:"id"}); 
-  //       }); 
-
-  // Load JSON data
-  var promise = $.ajax({
-    dataType: "json",
-    url: '/api/items',
-    data: 'X',
-    success: console.log('X')
-  });
-        promise.then(function(data){
-          cachedGeoJson = data; //save the geojson in case we want to update its values
-          dataLayer = new google.maps.Data();
-          dataLayer.addGeoJson(cachedGeoJson,{idPropertyName:"id"}); 
-          toggleDataLayer(true);
-
-          function toggleDataLayer(input) {
-            if(input === true){
-              dataLayer.setMap(map);
-            } else {
-              dataLayer.setMap(null);
-            };
-          };
-
-          // Set style for icons
-          dataLayer.setStyle(function(feature) {
-            if(feature.getProperty('claimed') === true) {
-              var icon = 'http://google.com/mapfiles/ms/micons/' + 'ltblue-dot' + '.png';
-            } else {
-              var icon = 'http://google.com/mapfiles/ms/micons/' + 'blue-dot' + '.png';
-            }
-            if(feature.getProperty('isColorful')) {
-              var icon = 'http://google.com/mapfiles/' + 'arrow' + '.png';
-            }
-            return {
-              clickable: true,
-              icon: icon
-            };
-          });
-
-          // Add listener for DOM manipulation
-          var currentId = 0;
-          dataLayer.addListener('click', function(event) {
-            changeDom(event);
-            if(!(currentId === event.feature.getId())){
-              if(!(currentId === 0)){
-                var prevFeature = dataLayer.getFeatureById(currentId);
-                prevFeature.setProperty('isColorful', false);
-              }
-              currentId = event.feature.getId();
-            }
-            event.feature.setProperty('isColorful', true);
-          });
-
-          // When hitting the new button, remove data layer, add draggable marker
-          var newButton = $('a#new-button')[0];
-
-          google.maps.event.addDomListener(newButton, 'click', function() {
-            toggleDataLayer(false);
-            var marker = new google.maps.Marker({
-              position: {lat: lat, lng: lng},
-              icon: 'http://google.com/mapfiles/ms/micons/' + 'blue-dot' + '.png',
-              draggable: true,
-              title:"Drag me!"
-            });
-
-            function toggleMarker(input){
-              if(input === true){
-                marker.setMap(map);
-              } else {
-                marker.setMap(null);
-              };
-            };
-
-            toggleMarker(true);
-
-            var submitButton = $('form#new-item')[0];
-            marker.addListener('dragend', function() {
-              var locat = marker.getPosition();
-
-              // Reverse geocode the new location and put in DOM
-              var geocoder = new google.maps.Geocoder;
-              geocoder.geocode( { 'location': locat}, function(results) {
-                var result = results[0].formatted_address;
-                $('input#item_location').val(result);
-              });
-            });
-
-            // Remove marker, go back to Data view
-            var submitForm = $('form#new-item')[0];
-            google.maps.event.addDomListener(submitForm, 'submit', function() {
-              toggleDataLayer(true);
-              toggleMarker(false);
-            })
-
-          });
-
-
-        });
-
-
-  function changeDom(event) {
-    var putInDom = new ChangeDom(event.feature);
-    putInDom.putOnPage();
-  }
-}
