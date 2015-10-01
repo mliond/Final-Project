@@ -15,6 +15,9 @@
         <div id="wrapper-new-button">
           <a id="new-button" class="btn btn-default">New!</a>
         </div>
+        <div id="claimed-checkbox-wrapper">
+          only unclaimed <input type="checkbox" id="unclaimed-checkbox">
+        </div>
       </div>
       <div id="new-item">
         <h1>Create new item <%= @item.id %></h1>
@@ -29,6 +32,7 @@
           <%= f.file_field :image %>
           <%= f.submit :submit, id: "submit-item" %>
         <% end %>
+
       </div>
     </div>
     <div class="col-lg-7">

@@ -49,7 +49,7 @@ function initializeMap() {
 };
 
 $(document).ready(function(){
-  $.when(locateUser()).done(initializeMap());
+  $.when(locateUser()).done([initializeMap()]);
 });
 
 // Map Object
@@ -85,6 +85,7 @@ var Map = function () {
 
 Map.prototype.initMap = function() {
   var map = new google.maps.Map(this.mapDiv, this.mapOptions);
+  toggleIdleListener(true);
 
   // Show or hide data layer
   function toggleDataLayer(command) {
@@ -135,14 +136,32 @@ Map.prototype.initMap = function() {
     });
   };
 
+  // if user claims item, reload data
+  function listenToClaim() {
+    var claimButton = $('button#claim-button')[0];
+    google.maps.event.addDomListener(claimButton, 'click', function() {
+      reloadData();
+    });
+  };
+
+  // if user clicks checkbox, change data
+  function listenToUnclaimedCheckbox() {
+    var unclaimedCheckbox = $('input#unclaimed-checkbox')[0];
+    google.maps.event.addDomListener(unclaimedCheckbox, 'click', function() {
+      reloadData();
+    });
+  }
+
   // This creates a data layer on the map
   function showDataLayer(data) {
     Map.dataLayer = new google.maps.Data();
     var cachedData = data; 
     Map.dataLayer.addGeoJson(cachedData, {idPropertyName:"id"}); 
-    toggleDataLayer(true);
     styleDataLayer();
+    listenToClaim();
+    listenToUnclaimedCheckbox();
     domStyleDataLayer();
+    toggleDataLayer(true);
   }
 
   // Load markers in the viewport from API
@@ -150,25 +169,27 @@ Map.prototype.initMap = function() {
     if(Map.dataLayer) {
       toggleDataLayer(false);
     }
+    var unclaimedBoolean = $('input#unclaimed-checkbox').is(':checked');
     var bounds = map.getBounds().toUrlValue();
     var data = $.ajax({
       dataType: "json",
       url: '/api/items',
-      data: {viewport: bounds},
+      data: {viewport: bounds, unclaimed: unclaimedBoolean},
       async: false, // needs to load first
       success: showDataLayer
     });
   };
 
+  function reloadData() {
+    loadPoints();
+  };
+
   function toggleIdleListener(command) {
-    var listener = map.addListener('idle', loadPoints);
+    map.addListener('idle', loadPoints);
     if(command === false){
       google.maps.event.clearListeners(map, 'idle');
     };
   };
-
-  // This event is fired when the map becomes idle after panning or zooming.
-  toggleIdleListener(true);
 
   function createNewMarker() {
     var centerMap = map.getCenter();
@@ -176,7 +197,7 @@ Map.prototype.initMap = function() {
       position: centerMap,
       icon: 'http://google.com/mapfiles/ms/micons/' + 'yellow-dot' + '.png',
       draggable: true,
-      title:"Drag me!"
+      title:"Drag me"
     });
     return marker
   }
@@ -196,15 +217,6 @@ Map.prototype.initMap = function() {
     geocoder.geocode( { 'location': coordinates}, function(results) {
       var result = results[0].formatted_address;
       $('input#item_location').val(result);
-    });
-  }
-
-  // takes marker's location and puts its address in DOM
-  function forwardGeocode(input) {
-    var geocoder = new google.maps.Geocoder;
-    geocoder.geocode( { 'address': input}, function(results) {
-      console.log(results[0].geometry.location);
-      return results[0].geometry.location;
     });
   }
 
@@ -229,9 +241,9 @@ Map.prototype.initMap = function() {
   // When submitting the form, remove marker, show data layer
   var submitForm = $('form#new-item')[0];
   google.maps.event.addDomListener(submitForm, 'submit', function() {
-    toggleDataLayer(true);
-    toggleIdleListener(true);
     toggleMarker(false);
+    reloadData();
+    toggleIdleListener(true);
   });
 
   // initialize Autocomplete in the location input
