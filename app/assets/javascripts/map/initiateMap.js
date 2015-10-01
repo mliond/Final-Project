@@ -15,23 +15,46 @@ Location.prototype.locateUser = function() {
 }
 
 Location.prototype.onLocation = function(position) {
-  Location.coords = position.coords;
+  var coordinates = position.coords
+  Location.coords = coordinates;
+  sessionStorage.setItem('coordinates', coordinates);
 };
 
+// If error, set coordinates to Carrer de Bailen 11, Barcelona
 Location.prototype.onError = function(error) {
   console.log(error);
+  coordsBarcelona = {latitude: 41.39167454068234, longitude: 2.1771672234719244};
+  Location.coords = coordsBarcelona;
+};
+
+// Locate user
+function locateUser() {
+  // if(!(sessionStorage.getItem('coordinates'))){
+  if(true){
+    var myLocation = new Location;
+    var position = myLocation.locateUser();
+  };
+}
+
+// Initialize Map
+function initializeMap() {
+  var s = document.createElement("script");
+  s.type = "text/javascript";
+  s.src  = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAhrCvig_rV3F4_cO9FUSNpB4eXOE1UMOQ&sensor=true&callback=gmap_draw";
+  window.gmap_draw = function(){
+    var map = new Map;
+    map.initMap();
+  };
+  $("head").append(s);
 };
 
 $(document).ready(function(){
-  if(!(Location.coords)){
-    var myLocation = new Location;
-    var position = myLocation.locateUser();
-  }
-})
+  $.when(locateUser()).done(initializeMap());
+});
 
 // Map Object
 var Map = function () {
-  this.currentId = 0; 
+  this.currentId = 0;
   this.lat = Location.coords.latitude; // geolocation from before
   this.lng = Location.coords.longitude; // geolocation from before
   this.mapDiv = document.getElementById('map-index');
@@ -115,7 +138,8 @@ Map.prototype.initMap = function() {
   // This creates a data layer on the map
   function showDataLayer(data) {
     Map.dataLayer = new google.maps.Data();
-    Map.dataLayer.addGeoJson(data,{idPropertyName:"id"}); 
+    var cachedData = data; 
+    Map.dataLayer.addGeoJson(cachedData, {idPropertyName:"id"}); 
     toggleDataLayer(true);
     styleDataLayer();
     domStyleDataLayer();
@@ -129,7 +153,7 @@ Map.prototype.initMap = function() {
     var bounds = map.getBounds().toUrlValue();
     var data = $.ajax({
       dataType: "json",
-      url: '/api/view',
+      url: '/api/items',
       data: {viewport: bounds},
       async: false, // needs to load first
       success: showDataLayer
@@ -139,7 +163,7 @@ Map.prototype.initMap = function() {
   function toggleIdleListener(command) {
     var listener = map.addListener('idle', loadPoints);
     if(command === false){
-      map.clearListeners('idle')
+      google.maps.event.clearListeners(map, 'idle');
     };
   };
 
@@ -147,9 +171,10 @@ Map.prototype.initMap = function() {
   toggleIdleListener(true);
 
   function createNewMarker() {
+    var centerMap = map.getCenter();
     var marker = new google.maps.Marker({
-      position: {lat: Location.coords.latitude, lng: Location.coords.longitude},
-      icon: 'http://google.com/mapfiles/ms/micons/' + 'blue-dot' + '.png',
+      position: centerMap,
+      icon: 'http://google.com/mapfiles/ms/micons/' + 'yellow-dot' + '.png',
       draggable: true,
       title:"Drag me!"
     });
@@ -174,10 +199,33 @@ Map.prototype.initMap = function() {
     });
   }
 
+  // takes marker's location and puts its address in DOM
+  function forwardGeocode(input) {
+    var geocoder = new google.maps.Geocoder;
+    geocoder.geocode( { 'address': input}, function(results) {
+      console.log(results[0].geometry.location);
+      return results[0].geometry.location;
+    });
+  }
+
+  // Add listeners for geocoding
   function styleMarker(marker) {
     marker.addListener('dragend', function() {
       var locat = marker.getPosition();
       reverseGeocode(locat);
+    });
+  }
+
+  function styleMarker2(marker) {
+    var locationInput = $('input#item_location')[0];
+    google.maps.event.addDomListener(locationInput, 'input', function() {
+      var input = $('input#item_location').val();
+      var geocoder = new google.maps.Geocoder;
+      var myBounds = map.getBounds();
+      geocoder.geocode( {address: input, bounds: myBounds}, function(results) {
+        var result = results[0].geometry.location;
+        marker.setPosition(result);
+      });
     });
   }
 
@@ -189,24 +237,14 @@ Map.prototype.initMap = function() {
     Map.marker = createNewMarker();
     toggleMarker(true);
     styleMarker(Map.marker);
+    styleMarker2(Map.marker);
   })
 
   // When submitting the form, remove marker, show data layer
   var submitForm = $('form#new-item')[0];
   google.maps.event.addDomListener(submitForm, 'submit', function() {
     toggleDataLayer(true);
+    toggleIdleListener(true);
     toggleMarker(false);
   });
 }
-
-// Initialize Map
-$(document).ready(function(){
-   var s = document.createElement("script");
-   s.type = "text/javascript";
-   s.src  = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAhrCvig_rV3F4_cO9FUSNpB4eXOE1UMOQ&sensor=true&callback=gmap_draw";
-   window.gmap_draw = function(){
-     var map = new Map;
-     map.initMap();
-   };
-   $("head").append(s);
-});
