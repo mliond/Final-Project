@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :items
 
   namespace :api do 
+    get 'view' => 'items#indexView'
     resources :items, only: [:index, :create, :update]
   end
   

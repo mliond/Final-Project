@@ -35,8 +35,8 @@ $(document).ready(function(){
    s.type = "text/javascript";
    s.src  = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAhrCvig_rV3F4_cO9FUSNpB4eXOE1UMOQ&sensor=true&callback=gmap_draw";
    window.gmap_draw = function(){
-       var map = new Map;
-       map.initMap();
+     var map = new Map;
+     map.initMap();
    };
    $("head").append(s);
 });
@@ -51,14 +51,51 @@ Map.prototype.initMap = function() {
   var mapDiv = document.getElementById('map-index');
 
   var mapOptions = {
-      center: {lat: lat, lng: lng},
-      zoom: 15,
-      streetViewControl: false,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      mapTypeControl: false
+    center: {lat: lat, lng: lng},
+    zoom: 15,
+    streetViewControl: false,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    mapTypeControl: false,
+    scrollwheel: false
   };
 
   var map = new google.maps.Map(mapDiv, mapOptions);
+
+  // Turns off POI + Transit
+  var noPlaces = [
+  {
+      featureType: "poi",
+      stylers: [
+        { visibility: "off" }
+      ]   
+    },
+  {
+      featureType: "transit",
+      stylers: [
+        { visibility: "off" }
+      ]   
+    }
+  ];
+  map.setOptions({styles: noPlaces});
+
+  // This event is fired when the map becomes idle after panning or zooming.
+  map.addListener('idle', showMarkers);
+
+  function showMarkers() {
+    var bounds = map.getBounds().toUrlValue();
+    console.log(bounds);
+    $.ajax({
+      dataType: "json",
+      url: '/api/view',
+      data: {viewport: bounds},
+      success: console.log('done')
+    });
+  
+
+
+    // marker.setMap(null)
+    // marker.setMap(map)
+  }
 
 
   // Alternative: Load JSON and make a marker for each object. Just has position so far
@@ -102,7 +139,12 @@ Map.prototype.initMap = function() {
   //       }); 
 
   // Load JSON data
-  var promise = $.getJSON("/api/items");
+  var promise = $.ajax({
+    dataType: "json",
+    url: '/api/items',
+    data: 'X',
+    success: console.log('X')
+  });
         promise.then(function(data){
           cachedGeoJson = data; //save the geojson in case we want to update its values
           dataLayer = new google.maps.Data();
