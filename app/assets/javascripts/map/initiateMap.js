@@ -147,7 +147,7 @@ Map.prototype.initMap = function() {
   // if user clicks checkbox, change data
   function listenToUnclaimedCheckbox() {
     var unclaimedCheckbox = $('input#unclaimed-checkbox')[0];
-    google.maps.event.addDomListener(unclaimedCheckbox, 'click', function() {
+    google.maps.event.addDomListener(unclaimedCheckbox, 'change', function() {
       reloadData();
     });
   }
@@ -155,11 +155,9 @@ Map.prototype.initMap = function() {
   // This creates a data layer on the map
   function showDataLayer(data) {
     Map.dataLayer = new google.maps.Data();
-    var cachedData = data; 
-    Map.dataLayer.addGeoJson(cachedData, {idPropertyName:"id"}); 
+    var cachedData = data;
+    Map.dataLayer.addGeoJson(cachedData, {idPropertyName:"id"});
     styleDataLayer();
-    listenToClaim();
-    listenToUnclaimedCheckbox();
     domStyleDataLayer();
     toggleDataLayer(true);
   }
@@ -184,8 +182,14 @@ Map.prototype.initMap = function() {
     loadPoints();
   };
 
+  function loadFirst() {
+    reloadData();
+    listenToClaim();
+    listenToUnclaimedCheckbox();
+  }
+
   function toggleIdleListener(command) {
-    map.addListener('idle', loadPoints);
+    map.addListener('idle', loadFirst);
     if(command === false){
       google.maps.event.clearListeners(map, 'idle');
     };
