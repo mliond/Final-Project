@@ -1,7 +1,6 @@
 class Api::ItemsController < ApplicationController
 
   def index
-    binding.pry
     items = Item.all
     featuresArray = items.each_with_object([]) do |i, array|
       array << {type: "Feature", properties: {id: i.id, name: i.name, description: i.description, image: i.image.url, location: i.location, created_at: i.created_at.strftime("%D - %T"), claimed: i.claimed}, geometry: {type: "Point", coordinates: [i.longitude, i.latitude]}}
