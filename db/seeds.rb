@@ -10,14 +10,18 @@ Item.destroy_all
 
 puts 'destroyed all items'
 
-num = 1
+num = 50
 
 num.times do |i|
-  Item.create({
-    name: 'Couch',
-    description: 'A red couch',
-    location: 'Carrer de Bailen 11, Barcelona'
+  random = RandomLocation.near_by(41.38506, 2.17340, 20000)
+  item = Item.create({
+    name: Faker::Name.name,
+    description: Faker::Hacker.say_something_smart,
+    latitude: random[0],
+    longitude: random[1]
   })
+  img = File.open('/Users/markus/downloads/testpic.gif')
+  item.pictures.create({image: img})
 end
 
 puts "Created #{num} new items. First one's id is #{Item.first.id}"

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151002111629) do
+ActiveRecord::Schema.define(version: 20151002152422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,10 @@ ActiveRecord::Schema.define(version: 20151002111629) do
     t.string   "latitude"
     t.string   "longitude"
   end
+
+  add_index "items", ["claimed"], name: "index_items_on_claimed", using: :btree
+  add_index "items", ["latitude"], name: "index_items_on_latitude", using: :btree
+  add_index "items", ["longitude"], name: "index_items_on_longitude", using: :btree
 
   create_table "pictures", force: :cascade do |t|
     t.integer  "item_id"
