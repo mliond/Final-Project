@@ -160,15 +160,13 @@ Map.prototype.initMap = function() {
     });
   }
 
-  // takes the input box and moves it into the map
+  // toggles the autocomplete div in the map's top left
   function toggleAutoCompleteOnMap(command) {
     if(command === true) {
       map.controls[google.maps.ControlPosition.LEFT_TOP].push(
       $('div#search-address')[0]);
     } else {
-      console.log(map.controls[google.maps.ControlPosition.LEFT_TOP]);
       map.controls[google.maps.ControlPosition.LEFT_TOP].pop();
-      console.log(map.controls[google.maps.ControlPosition.LEFT_TOP]);
     }
   }
 
