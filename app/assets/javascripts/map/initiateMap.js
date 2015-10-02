@@ -234,8 +234,7 @@ Map.prototype.initMap = function() {
     var geocoder = new google.maps.Geocoder;
     geocoder.geocode( { 'location': coordinates}, function(results) {
       var result = results[0].formatted_address;
-      $('input#item_longitude').val(coordinates.H);
-      $('input#item_latitude').val(coordinates.L);
+      changeLocationForm(coordinates);
       $('input#autocomplete_location').val(result);
     });
   }
@@ -245,8 +244,15 @@ Map.prototype.initMap = function() {
     var geocoder = new google.maps.Geocoder;
     var locationInput = $('input#autocomplete_location').val();
     geocoder.geocode( { 'address': locationInput, bounds: map.getBounds()}, function(results) {
-      moveMarker(results[0].geometry.location);
+      var coordinates = results[0].geometry.location;
+      changeLocationForm(coordinates);
+      moveMarker(coordinates);
     });
+  }
+
+  function changeLocationForm(coordinates){
+    $('input#item_longitude').val(coordinates.L);
+    $('input#item_latitude').val(coordinates.H);
   }
 
   // Add listeners for geocoding

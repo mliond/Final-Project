@@ -33,7 +33,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'capistrano-rails', group: :development
 
 # Localization through Geocoder
-gem 'geocoder'
+# gem 'geocoder'
 
 # Picture through Paperclip and remotipart
 gem "paperclip", "~> 4.3"

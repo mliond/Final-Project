@@ -4,8 +4,9 @@ class Api::ItemsController < ApplicationController
     bounds = params[:viewport].split(",")
     unclaimed = params[:unclaimed]
     featuresArray = Item.all.each_with_object([]) do |i, array|
-    if within_bounds(i, bounds) && unclaimed_or_not(i, unclaimed)
-      array << {type: "Feature", properties: {id: i.id, name: i.name, description: i.description, image: i.image.url(:medium), location: i.location, created_at: i.created_at.strftime("%D - %T"), claimed: i.claimed}, geometry: {type: "Point", coordinates: [i.longitude, i.latitude]}}
+    # if within_bounds(i, bounds) && unclaimed_or_not(i, unclaimed)
+    if true
+      array << {type: "Feature", properties: {id: i.id, name: i.name, description: i.description, image: i.image.url(:medium), location: i.location, created_at: i.created_at.strftime("%D - %T"), claimed: i.claimed}, geometry: {type: "Point", coordinates: [i.longitude.to_f, i.latitude.to_f]}}
       end
     end
     render json: {type: "FeatureCollection", features: featuresArray}
@@ -25,7 +26,7 @@ class Api::ItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:item).permit(:name, :location, :description, :claimed, :image)
+    params.require(:item).permit(:name, :description, :latitude, :longitude, :claimed, :image)
   end
 
   def within_bounds(i, bounds)

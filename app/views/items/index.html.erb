@@ -27,10 +27,8 @@
           <%= f.text_field :name %>
           <%= f.label :description %>
           <%= f.text_field :description %>
-          <%= f.label :longitude %>
-          <%= f.text_field :longitude %>
-          <%= f.label :latitude %>
-          <%= f.text_field :latitude %>
+          <%= f.hidden_field :longitude %>
+          <%= f.hidden_field :latitude %>
           <%= f.file_field :image %>
           <%= f.submit :submit, id: "submit-item" %>
         <% end %>
