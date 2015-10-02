@@ -11,10 +11,6 @@ Item.destroy_all
 puts 'destroyed all items'
 
 num = 100
-images = []
-15.times do |i|
-  images << "gif-#{i}.gif"
-end
 
 num.times do |i|
   random = RandomLocation.near_by(41.38506, 2.17340, 1000)
@@ -24,10 +20,12 @@ num.times do |i|
     latitude: random[0],
     longitude: random[1]
   })
-  img1 = File.open("/Users/markus/downloads/Testpics/#{images[rand(1..15)]}")
-  img2 = File.open("/Users/markus/downloads/Testpics/#{images[rand(1..15)]}")
+  img1 = File.open("/Users/markus/downloads/Testpics/gif-#{rand(1..15)}.gif")
+  img2 = File.open("/Users/markus/downloads/Testpics/gif-#{rand(1..15)}.gif")
   item.pictures.create({image: img1})
   item.pictures.create({image: img2})
+
+  puts "created Item No. #{item.id}"
 end
 
 puts "Created #{num} new items. First one's id is #{Item.first.id}"
