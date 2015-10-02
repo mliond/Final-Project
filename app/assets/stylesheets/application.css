@@ -14,16 +14,23 @@
  *= require_self
  */
 
- html, body { height: 100%;}
- 
- #map { 
-  height: 80%; 
-  width: 80%;
- }
+html {
+  height: 100%;
+}
 
- h5#item-claimed, h5#item-id {
-  display: none; 
- }
+body {
+  height: 100%;
+  overflow:hidden;
+}
+
+#map {
+  height: 80%;
+  width: 80%;
+}
+
+h5#item-claimed, h5#item-id {
+  display: none;
+}
 
 button#claim-button {
   display: none;

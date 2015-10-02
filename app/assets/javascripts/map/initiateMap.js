@@ -45,7 +45,7 @@ function initializeMap() {
     var map = new Map;
     map.initMap();
   };
-  $("head").append(s);
+  $("body").append(s);
 };
 
 $(document).ready(function(){
@@ -152,6 +152,14 @@ Map.prototype.initMap = function() {
     });
   }
 
+  // if user clicks checkbox, change data
+  function listenToAutocomplete() {
+    var autocompleteLocation = $('a#autocomplete_location')[0];
+    google.maps.event.addDomListener(autocompleteLocation, 'click', function() {
+      forwardGeocode();
+    });
+  }
+
   // This creates a data layer on the map
   function showDataLayer(data) {
     Map.dataLayer = new google.maps.Data();
@@ -186,6 +194,7 @@ Map.prototype.initMap = function() {
     reloadData();
     listenToClaim();
     listenToUnclaimedCheckbox();
+    listenToAutocomplete();
   }
 
   function toggleIdleListener(command) {
@@ -206,6 +215,11 @@ Map.prototype.initMap = function() {
     return marker
   }
 
+  // moves the new-item marker
+  function moveMarker(position) {
+    Map.marker.setPosition(position);
+  }
+
   // show or hide specified marker
   function toggleMarker(command) {
     if(command === true){
@@ -220,7 +234,18 @@ Map.prototype.initMap = function() {
     var geocoder = new google.maps.Geocoder;
     geocoder.geocode( { 'location': coordinates}, function(results) {
       var result = results[0].formatted_address;
-      $('input#item_location').val(result);
+      $('input#item_longitude').val(coordinates.H);
+      $('input#item_latitude').val(coordinates.L);
+      $('input#autocomplete_location').val(result);
+    });
+  }
+
+  // takes autocomplete's input and moves marker
+  function forwardGeocode(coordinates) {
+    var geocoder = new google.maps.Geocoder;
+    var locationInput = $('input#autocomplete_location').val();
+    geocoder.geocode( { 'address': locationInput, bounds: map.getBounds()}, function(results) {
+      moveMarker(results[0].geometry.location);
     });
   }
 
@@ -251,7 +276,7 @@ Map.prototype.initMap = function() {
   });
 
   // initialize Autocomplete in the location input
-  var locationInput = $('input#item_location')[0];
+  var locationInput = $('input#autocomplete_location')[0];
   var options = {bounds: map.getBounds()}
   autocomplete = new google.maps.places.Autocomplete(locationInput, options);
 };

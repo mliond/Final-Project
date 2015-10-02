@@ -3,8 +3,8 @@ class Item < ActiveRecord::Base
   validates :name, presence: true
   validates :description, presence: true
 
-  geocoded_by :location
-  after_validation :geocode
+  # geocoded_by :location
+  # after_validation :geocode
 
   reverse_geocoded_by :latitude, :longitude,
     :address => :location

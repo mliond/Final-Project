@@ -5,7 +5,7 @@ class Api::ItemsController < ApplicationController
     unclaimed = params[:unclaimed]
     featuresArray = Item.all.each_with_object([]) do |i, array|
     if within_bounds(i, bounds) && unclaimed_or_not(i, unclaimed)
-      array << {type: "Feature", properties: {id: i.id, name: i.name, description: i.description, image: i.image.url, location: i.location, created_at: i.created_at.strftime("%D - %T"), claimed: i.claimed}, geometry: {type: "Point", coordinates: [i.longitude, i.latitude]}}
+      array << {type: "Feature", properties: {id: i.id, name: i.name, description: i.description, image: i.image.url(:medium), location: i.location, created_at: i.created_at.strftime("%D - %T"), claimed: i.claimed}, geometry: {type: "Point", coordinates: [i.longitude, i.latitude]}}
       end
     end
     render json: {type: "FeatureCollection", features: featuresArray}
