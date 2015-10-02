@@ -160,6 +160,18 @@ Map.prototype.initMap = function() {
     });
   }
 
+  // takes the input box and moves it into the map
+  function toggleAutoCompleteOnMap(command) {
+    if(command === true) {
+      map.controls[google.maps.ControlPosition.LEFT_TOP].push(
+      $('div#search-address')[0]);
+    } else {
+      console.log(map.controls[google.maps.ControlPosition.LEFT_TOP]);
+      map.controls[google.maps.ControlPosition.LEFT_TOP].pop();
+      console.log(map.controls[google.maps.ControlPosition.LEFT_TOP]);
+    }
+  }
+
   // This creates a data layer on the map
   function showDataLayer(data) {
     Map.dataLayer = new google.maps.Data();
@@ -271,12 +283,14 @@ Map.prototype.initMap = function() {
     Map.marker = createNewMarker();
     toggleMarker(true);
     styleMarker(Map.marker);
+    toggleAutoCompleteOnMap(true);
   })
 
   // When submitting the form, remove marker, show data layer
   var submitForm = $('form#new-item')[0];
   google.maps.event.addDomListener(submitForm, 'submit', function() {
     toggleMarker(false);
+    toggleAutoCompleteOnMap(false);
     reloadData();
     toggleIdleListener(true);
   });

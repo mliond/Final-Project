@@ -48,3 +48,9 @@ div#new-item, div#map-new-item {
 .pac-container {
   background-color: white;
 }
+
+/* Doesnt work!! */
+div#search-address {
+  background-color: black;
+  padding-top: 20px;
+}
