@@ -20,7 +20,11 @@ html {
 
 body {
   height: 100%;
-  /*overflow:hidden;*/
+  /*overflow: hidden;*/
+}
+
+div#item-wrapper {
+  display: none;
 }
 
 #map {
@@ -62,4 +66,13 @@ div#login {
 div#search-address {
   background-color: black;
   padding-top: 20px;
+}
+
+footer {
+  background-color: grey;
+  height: 60px;
+  color: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
