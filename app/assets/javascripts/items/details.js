@@ -35,18 +35,18 @@ function _changePage(data) {
 }
 
 function _emptyTheHTML() {
-  $('ol.carousel-indicators').empty();
-  $('div.carousel-inner').empty();
+  $('#item-info ol.carousel-indicators').empty();
+  $('#item-info div.carousel-inner').empty();
 }
 
 function _putFirstPictureOnDom(img) {
-  $('ol.carousel-indicators').append('<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>');
-  $('div.carousel-inner').append('<div class="item active"><img src="'+img+'" alt="..."><div class="carousel-caption">..Caption..</div>');
+  $('#item-info ol.carousel-indicators').append('<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>');
+  $('#item-info div.carousel-inner').append('<div class="item active"><img src="'+img+'" alt="..."><div class="carousel-caption">..Caption..</div>');
 }
 
 function _putPicturesOnDom(img, i) {
-  $('ol.carousel-indicators').append('<li data-target="#carousel-example-generic" data-slide-to="1"></li>')
-  $('div.carousel-inner').append('<div class="item"><img src="'+img+'" alt="..."><div class="carousel-caption">Caption</div></div>')
+  $('#item-info ol.carousel-indicators').append('<li data-target="#carousel-example-generic" data-slide-to="1"></li>')
+  $('#item-info div.carousel-inner').append('<div class="item"><img src="'+img+'" alt="..."><div class="carousel-caption">Caption</div></div>')
 }
 
 function _putTextOnDom(item, createdAt) {
