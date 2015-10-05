@@ -12,11 +12,18 @@ class Api::ItemsController < ApplicationController
   end
 
   def create
-    item = Item.create(item_params)
+    item = Item.new(item_params)
     if images = params[:images]
       images.each do |img|
-        item.pictures.create(image: img)
+        item.pictures.new(image: img)
       end
+    else
+      render json: {error: "please attach pictures"}, status: 403
+      return
+    end
+    unless item.save
+      render json: {item: item, error: "please enter a name and description"}, status: 403
+      return
     end
     render json: item
   end

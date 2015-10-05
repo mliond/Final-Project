@@ -45,6 +45,10 @@ div#new-item, div#map-new-item {
   display: none;
 }
 
+div#form-error {
+  display: none;
+}
+
 .pac-container {
   background-color: white;
 }

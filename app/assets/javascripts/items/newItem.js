@@ -11,6 +11,7 @@ $('form#new-item').on('submit', function(event) {
   // var fileInput = document.getElementById('item_image');
   // var file = fileInput.files[0];
   // formData.append('image', file);
+  $('div#form-error').hide();
 
   $.ajax({
     url: '/api/items',
@@ -19,13 +20,22 @@ $('form#new-item').on('submit', function(event) {
     processData: false,
     type: 'POST',
     dataType: 'json',
-    data: formData
+    data: formData,
+    success: _successOnSubmission,
+    error: _errorOnSubmission
   });
+});
 
-  $('input#item_name').val("");
-  $('input#item_description').val("");
-  $('input#item_location').val("");
-  // $('input#item_image').val("");
+function _successOnSubmission(data) {
+  var myForm = $('form#new-item')[0]
+  myForm.reset();
   $('div#new-item').hide();
   $('div#item-info').show();
-})
+  var dataView = new Event('dataView');
+  myForm.dispatchEvent(dataView);
+}
+
+function _errorOnSubmission(data) {
+  $('div#form-error').text(data.responseJSON.error);
+  $('div#form-error').fadeIn('slow');
+}
