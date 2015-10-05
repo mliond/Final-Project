@@ -116,8 +116,8 @@ Map.prototype.initMap = function() {
 
   // Dom manipulation
   function changeDom(event) {
-    var putInDom = new ChangeDom(event.feature);
-    putInDom.putOnPage();
+    var dom = new ChangeDom(event.feature);
+    dom.showItem();
   }
 
   // Add listener for DOM manipulation on click

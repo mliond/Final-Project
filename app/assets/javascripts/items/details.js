@@ -15,12 +15,19 @@ var ChangeDom = function(input) {
   this.input = input;
 }
 
-ChangeDom.prototype.putOnPage = function() {
-  item = this.input.getProperty('item')
-  createdAt = this.input.getProperty('created_at')
+ChangeDom.prototype.showItem = function() {
+  var itemId = (this.input.getProperty('item').id)
+  $.ajax({
+    method: "GET",
+    url: '/api/items/' + itemId,
+    success: _changePage
+  });
+}
+
+function _changePage(data) {
   _emptyTheHTML();
-  _putTextOnDom(item, createdAt);
-  pictures = this.input.getProperty('pictures')
+  _putTextOnDom(data.item, data.created_at);
+  pictures = data.pictures;
   _putFirstPictureOnDom(pictures[0]);
   for(i = 1, length = pictures.length; i < length; ++i) {
     _putPicturesOnDom(pictures[i], i);
