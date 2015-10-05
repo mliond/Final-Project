@@ -5,12 +5,9 @@ class Api::ItemsController < ApplicationController
     unclaimed = params[:unclaimed]
     featuresArray = Item.all.each_with_object([]) do |i, array|
     if within_bounds(i, bounds) && unclaimed_or_not(i, unclaimed)
-      # array << {type: "Feature", properties: {id: i.id, name: i.name, description: i.description, location: i.location, pictures: i.pictures, , claimed: i.claimed}, geometry: {type: "Point", coordinates: [i.longitude.to_f, i.latitude.to_f]}}
-
       pictureURLs = i.pictures.each_with_object([]) do |i, array|
         array << i.image.url(:medium)
       end
-
       array << {type: "Feature", properties: {id: i.id, item: i, pictures: pictureURLs, created_at: i.created_at.strftime("%D - %T"), claimed: i.claimed}, geometry: {type: "Point", coordinates: [i.longitude.to_f, i.latitude.to_f]}}
       end
     end
@@ -28,6 +25,9 @@ class Api::ItemsController < ApplicationController
   end
 
   def update
+    Item.where(active: true).each do |item|
+      item.update(active: false)
+    end
     item = Item.find(params[:id])
     item.update(item_params)
     render json: item
@@ -36,7 +36,7 @@ class Api::ItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:item).permit(:name, :description, :latitude, :longitude, :claimed, :image)
+    params.require(:item).permit(:name, :description, :latitude, :longitude, :claimed, :image, :active)
   end
 
   def within_bounds(i, bounds)

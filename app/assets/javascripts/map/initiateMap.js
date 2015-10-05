@@ -54,7 +54,6 @@ $(document).ready(function(){
 
 // Map Object
 var Map = function () {
-  this.currentId = 0;
   this.lat = Location.coords.latitude; // geolocation from before
   this.lng = Location.coords.longitude; // geolocation from before
   this.mapDiv = document.getElementById('map-index');
@@ -101,10 +100,10 @@ Map.prototype.initMap = function() {
     Map.dataLayer.setStyle(function(feature) {
       if(feature.getProperty('claimed') === true) {
         var icon = 'http://google.com/mapfiles/ms/micons/' + 'ltblue-dot' + '.png';
-      } else {
+      } else if(feature.getProperty('claimed') === false) {
         var icon = 'http://google.com/mapfiles/ms/micons/' + 'blue-dot' + '.png';
       }
-      if(feature.getProperty('isColorful')) {
+      if(feature.H.item.active === true) {
         var icon = 'http://google.com/mapfiles/ms/micons/' + 'yellow-dot' + '.png';
       }
       return {
@@ -122,19 +121,22 @@ Map.prototype.initMap = function() {
 
   // Add listener for DOM manipulation on click
   function domStyleDataLayer() {
-    var currentId = 0;
     Map.dataLayer.addListener('click', function(event) {
+      ToggleActive(event.feature, true);
       changeDom(event);
-      if(!(currentId === event.feature.getId())){
-        if(!(currentId === 0)){
-          var prevFeature = Map.dataLayer.getFeatureById(currentId);
-          prevFeature.setProperty('isColorful', false);
-        }
-        currentId = event.feature.getId();
-      }
-      event.feature.setProperty('isColorful', true);
+      // reloadData();
+    })
+  }
+
+  // Toggle the active property
+  function ToggleActive(feature, command) {
+    itemId = feature.H.item.id;
+    $.ajax({
+      method: "PUT",
+      url: '/api/items/' + itemId,
+      data: { id: itemId, item: { active: command } }
     });
-  };
+  }
 
   // if user claims item, reload data
   function listenToClaim() {
