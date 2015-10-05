@@ -47,6 +47,11 @@ div#new-item, div#map-new-item {
 
 div#form-error {
   display: none;
+  background-color: red;
+}
+
+div#login {
+  display: none;
 }
 
 .pac-container {

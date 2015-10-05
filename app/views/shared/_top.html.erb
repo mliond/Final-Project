@@ -1,3 +1,19 @@
-<div class="container">
-  <h1>Header</h1>
-</div>
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <ul class="nav navbar-nav navbar-right">
+      <li><%= link_to "Map", items_path %></li>
+      <li><%= link_to "Sign in", new_user_session_path, id: "login" %></a></li>
+      <li><%= link_to "Sign up", new_user_registration_path %></li>
+     <!--  <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Action</a></li>
+          <li><a href="#">Another action</a></li>
+          <li><a href="#">Something else here</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#">Separated link</a></li>
+        </ul>
+      </li> -->
+    </ul>
+  </div>
+</nav>
