@@ -119,10 +119,21 @@ Map.prototype.initMap = function() {
     dom.showItem();
   }
 
-  // Add listener for DOM manipulation on click
+  // First DOM listener
   function domStyleDataLayer() {
+    var returned = google.maps.event.addListenerOnce(Map.dataLayer, 'click', function(event) {
+      changeDom(event);
+      $('div#item-wrapper').fadeIn('slow');
+      $("div.col-lg-12").attr('class', 'col-lg-7');
+      secondDomStyleDataLayer();
+    });
+  }
+
+
+  // Add listener for DOM manipulation on click
+  function secondDomStyleDataLayer() {
     var currentId = 0;
-    Map.dataLayer.addListener('click', function(event) {
+    google.maps.event.addListener(Map.dataLayer, 'click', function(event) {
       if(!(currentId === event.feature.getId())){
         if(!(currentId === 0)){
           var prevFeature = Map.dataLayer.getFeatureById(currentId);
