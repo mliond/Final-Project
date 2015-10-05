@@ -13,7 +13,7 @@ puts 'destroyed all items'
 num = 100
 
 num.times do |i|
-  random = RandomLocation.near_by(41.38506, 2.17340, 1000)
+  random = RandomLocation.near_by(41.38506, 2.17340, 2500)
   item = Item.create({
     name: Faker::Name.name,
     description: Faker::Hacker.say_something_smart,
