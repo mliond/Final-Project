@@ -103,7 +103,7 @@ Map.prototype.initMap = function() {
       } else if(feature.getProperty('claimed') === false) {
         var icon = 'http://google.com/mapfiles/ms/micons/' + 'blue-dot' + '.png';
       }
-      if(feature.H.item.active === true) {
+      if(feature.getProperty('isColorful')) {
         var icon = 'http://google.com/mapfiles/ms/micons/' + 'yellow-dot' + '.png';
       }
       return {
@@ -121,10 +121,17 @@ Map.prototype.initMap = function() {
 
   // Add listener for DOM manipulation on click
   function domStyleDataLayer() {
+    var currentId = 0;
     Map.dataLayer.addListener('click', function(event) {
-      ToggleActive(event.feature, true);
+      if(!(currentId === event.feature.getId())){
+        if(!(currentId === 0)){
+          var prevFeature = Map.dataLayer.getFeatureById(currentId);
+          prevFeature.setProperty('isColorful', false);
+        }
+        currentId = event.feature.getId();
+      }
+      event.feature.setProperty('isColorful', true);
       changeDom(event);
-      // reloadData();
     })
   }
 
@@ -288,7 +295,8 @@ Map.prototype.initMap = function() {
 
   // When submitting the form, remove marker, show data layer
   var submitForm = $('form#new-item')[0];
-  google.maps.event.addDomListener(submitForm, 'submit', function() {
+  // google.maps.event.addDomListener(submitForm, 'submit', function() {
+  google.maps.event.addDomListener(submitForm, 'dataView', function() {
     toggleMarker(false);
     toggleAutoCompleteOnMap(false);
     reloadData();
