@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151006110551) do
+ActiveRecord::Schema.define(version: 20151006112301) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,11 +26,13 @@ ActiveRecord::Schema.define(version: 20151006110551) do
     t.string   "latitude"
     t.string   "longitude"
     t.boolean  "active",      default: false
+    t.integer  "user_id"
   end
 
   add_index "items", ["claimed"], name: "index_items_on_claimed", using: :btree
   add_index "items", ["latitude"], name: "index_items_on_latitude", using: :btree
   add_index "items", ["longitude"], name: "index_items_on_longitude", using: :btree
+  add_index "items", ["user_id"], name: "index_items_on_user_id", using: :btree
 
   create_table "pictures", force: :cascade do |t|
     t.integer  "item_id"
@@ -44,4 +46,15 @@ ActiveRecord::Schema.define(version: 20151006110551) do
 
   add_index "pictures", ["item_id"], name: "index_pictures_on_item_id", using: :btree
 
+  create_table "users", force: :cascade do |t|
+    t.string   "name"
+    t.string   "email"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "password_digest"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_foreign_key "items", "users"
 end

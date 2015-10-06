@@ -6,26 +6,44 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+User.destroy_all
 Item.destroy_all
+Picture.destroy_all
 
-puts 'destroyed all items'
+puts 'destroyed everything'
 
-num = 100
+userNum = 25
+itemNum = 100
 
-num.times do |i|
-  random = RandomLocation.near_by(41.38506, 2.17340, 2500)
-  item = Item.create({
-    name: Faker::Name.name,
-    description: Faker::Hacker.say_something_smart,
-    latitude: random[0],
-    longitude: random[1]
+userNum.times do |u|
+  # create user
+  u = User.create({
+  name: Faker::Name.name,
+  email: Faker::Internet.email,
+  password: "test",
+  password_confirmation: "test"
   })
-  img1 = File.open("/Users/markus/downloads/Testpics/gif-#{rand(1..15)}.gif")
-  img2 = File.open("/Users/markus/downloads/Testpics/gif-#{rand(1..15)}.gif")
-  item.pictures.create({image: img1})
-  item.pictures.create({image: img2})
+  puts "created user no #{u.id}"
 
-  puts "created Item No. #{item.id}"
+  #create items each
+  itemNum.times do |i|
+    random = RandomLocation.near_by(41.38506, 2.17340, 25000)
+    item = u.items.create({
+      name: Faker::Name.name,
+      description: Faker::Hacker.say_something_smart,
+      latitude: random[0],
+      longitude: random[1]
+    })
+    puts "created item no #{item.id}"
+
+    # create pictures each
+    img1 = File.open("/Users/markus/downloads/Testpics/gif-#{rand(1..15)}.gif")
+    img2 = File.open("/Users/markus/downloads/Testpics/gif-#{rand(1..15)}.gif")
+    pic1 = item.pictures.create({image: img1})
+    puts "created picture no #{pic1.id}"
+    pic2 = item.pictures.create({image: img2})
+    puts "created picture no #{pic2.id}"
+  end
 end
 
-puts "Created #{num} new items. First one's id is #{Item.first.id}"
+puts "-> created #{userNum} new users with #{itemNum} items with 2 pictures each."

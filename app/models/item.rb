@@ -4,6 +4,7 @@ class Item < ActiveRecord::Base
   validates :description, presence: true
 
   has_many :pictures
+  belongs_to :user
 
   # has_attached_file :image, styles: { medium: "500x500>", thumb: "100x100>" }, default_url: "/images/items/:id.png"
   # validates :image, attachment_presence: true
