@@ -1,3 +1,5 @@
+require "open-uri"
+
 class Picture < ActiveRecord::Base
 
   belongs_to :item
@@ -7,4 +9,7 @@ class Picture < ActiveRecord::Base
   validates_attachment_content_type :image, content_type: ['image/jpeg', 'image/png', 'image/gif', 'application/pdf']
   validates_with AttachmentSizeValidator, attributes: :image, less_than: 3.megabytes
 
+  def picture_from_url(url)
+    self.image = open(url)
+  end
 end

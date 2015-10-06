@@ -35,11 +35,17 @@ userNum.times do |u|
     # create pictures each
     # img1 = File.open("/Users/markus/downloads/Testpics/gif-#{rand(1..15)}.gif")
     # img2 = File.open("/Users/markus/downloads/Testpics/gif-#{rand(1..15)}.gif")
-    img1 = File.open("https://media.giphy.com/media/i03O15D50joLS/giphy.gif")
-    img2 = File.open("https://media.giphy.com/media/If3pitjg4oDYs/giphy.gif")
-    pic1 = item.pictures.create({image: img1})
+    # pic1 = item.pictures.create({image: img1})
+    # puts "created picture no #{pic1.id}"
+    # pic2 = item.pictures.create({image: img2})
+    # puts "created picture no #{pic2.id}"
+    img1 = "https://media.giphy.com/media/i03O15D50joLS/giphy.gif"
+    pic1 = item.pictures.create()
+    pic1.picture_from_url(img1)
     puts "created picture no #{pic1.id}"
-    pic2 = item.pictures.create({image: img2})
+    img2 = "https://media.giphy.com/media/If3pitjg4oDYs/giphy.gif"
+    pic2 = item.pictures.create()
+    pic2.picture_from_url(img2)
     puts "created picture no #{pic2.id}"
   end
 end
