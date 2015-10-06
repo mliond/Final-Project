@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-
+ruby '2.0.0'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
 # Use postgresql as the database for Active Record
@@ -35,6 +35,9 @@ gem 'bcrypt', '~> 3.1.7'
 # Picture through Paperclip and remotipart
 gem "paperclip", "~> 4.3"
 gem 'remotipart', '~> 1.2.1'
+
+# rails_12factor for Heroku deployment
+gem 'rails_12factor'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
