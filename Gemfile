@@ -39,14 +39,16 @@ gem 'remotipart', '~> 1.2.1'
 # rails_12factor for Heroku deployment
 gem 'rails_12factor'
 
+# To populate the database for testing
+gem 'faker'
+gem 'random-location'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'pry'
 
-  # To populate the database for testing
-  gem 'faker'
-  gem 'random-location'
+
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
