@@ -1,5 +1,8 @@
 class Api::ItemsController < ApplicationController
 
+  before_action :is_logged_in?, only: [:create]
+  before_action :is_owner?, only: [:update]
+
   def index
     bounds = params[:viewport].split(",")
     unclaimed = params[:unclaimed]
@@ -46,6 +49,17 @@ class Api::ItemsController < ApplicationController
   end
 
   private
+
+  def is_logged_in?
+    unless logged_in?
+      render json: {error: "Please login to create new items"}, status: 403
+      return
+    end
+  end
+
+  def is_owner?
+    #add ownership here
+  end
 
   def item_params
     params.require(:item).permit(:name, :description, :latitude, :longitude, :claimed, :image, :active)
