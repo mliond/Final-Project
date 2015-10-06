@@ -34,11 +34,10 @@
               <h5 id="item-claimed">Claimed</h5>
               <button id="claim-button" class="btn btn-default">Claim!</button>
             </div>
-            <% if user_signed_in? %>
+            <!-- Hide if not logged in -->
               <div id="wrapper-new-button">
                 <a id="new-button" class="btn btn-default">New!</a>
               </div>
-            <% end %>
             <div id="claimed-checkbox-wrapper">
               only unclaimed <input type="checkbox" id="unclaimed-checkbox">
             </div>
