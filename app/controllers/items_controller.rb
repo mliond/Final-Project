@@ -2,6 +2,7 @@ class ItemsController < ApplicationController
 
   def index
     @item = Item.new
+    @user = User.new
   end
 
   def edit

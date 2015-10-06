@@ -6,11 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-User.destroy_all
-Item.destroy_all
-Picture.destroy_all
-
-puts 'destroyed everything'
+puts 'started (nothing destroyed)'
 
 userNum = 25
 itemNum = 100

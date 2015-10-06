@@ -66,7 +66,7 @@
           </div>
           <div id="login">
             <h1>
-              Please log in:
+              <%= render partial: '/users/form', locals: {form_variable: @user, button_variable: "Sign up"} %>
             </h1>
           </div>
 

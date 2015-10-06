@@ -10,44 +10,42 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login <span class="caret"></span></a>
         <ul class="dropdown-menu">
         <!-- Hide when not logged in -->
-          <% if true %>
+          <% if logged_in? %>
             <li>
-              <%= link_to "Hi" %>
+              <%= link_to "Hi #{current_user.name}" %>
             </li>
             <li role="separator" class="divider"></li>
             <li>
-              <!-- Sign out link -->
+              <%= link_to "Log out", logout_path, method: 'DELETE' %>
             </li>
           <% else %>
             <li>
-              <%= form_for(:user, :url => user_session_path) do |f| %>
+              New user
+            </li>
+            <li>
+              <%= form_for(:session, url: login_path) do |f| %>
+
+                <div class="field">
+                <%= f.label :email %><br>
                 <%= f.text_field :email %>
+                </div>
+
+                 <div class="field">
+                <%= f.label :password %><br>
                 <%= f.password_field :password %>
-                <%= f.check_box :remember_me %>
-                <%= f.label :remember_me %>
-                <%= f.submit 'Sign in' %>
+                </div>
+
+                <div class="field">
+                <%= f.submit "Login" %>
+                </div>
+
               <% end %>
             </li>
           <% end %>
 
-      <!--       <li>
-              <form>
-              <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
-              </div>
-            </li>
             <li>
-              <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-              </div>
             </li>
-            <li role="separator" class="divider"></li>
-            <li>
-              <button type="submit" class="btn btn-default">Submit</button>
-              </form>
-            </li> -->
+            <li><%= link_to "Sign up", new_user_path %></li>
         </ul>
       </li>
     </ul>

@@ -1,7 +1,7 @@
-$('a#login').on('click', function(event) {
-  event.preventDefault();
-  // $('div#item-info').hide();
-  // $('div#login').show();
+// $('a#login').on('click', function(event) {
+//   event.preventDefault();
+//   $('div#item-info').hide();
+//   $('div#login').show();
 
   // $.ajax({ url: '/users/sign_in',
   //   type: 'POST',
@@ -13,7 +13,7 @@ $('a#login').on('click', function(event) {
   //     console.log(response);
   //   }
   // });
-})
+// })
 
 function onSuccess(data) {
   debugger
