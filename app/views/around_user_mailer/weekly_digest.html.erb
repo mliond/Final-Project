@@ -1,0 +1,20 @@
+<h1>Weekly digest</h1>
+
+<p>
+  Hi, <%= @user.name %>
+</p>
+
+<p>
+  <%= @closest_item.name %>
+  <img src=<%= @closest_item %> alt="" max-height="300px" width="100%">
+  This item is so close to you, just walk to <%= @closest_item.location %> and pick it up!
+</p>
+
+<p>
+  Also, there are <%= @items.count %> around you. Get them!
+</p>
+
+<p>
+  Talk to you next week! <br>
+  The team
+</p>
