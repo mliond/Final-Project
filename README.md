@@ -9,3 +9,5 @@ Day 3: Embedded creating a new instance through jQuery. Toggle between map data 
 Day 4: Refactored JS, added Autocomplete form, map only loads viewport, toggle between unclaimed and all items. Minor: Turned off map POI and transit data, which was distracting from the data.
 
 Day 5: Removed Geocoder gem and implemented Google Maps Geocode instead. Put autocomplete location into the map, which can move the marker. Created picture model, which belongs to item, therefore enabling multiple pictures. Minor: Used lower quality images for faster loading. Implemented Bootstrap Caroussel for pictures.
+
+Day 6: Played around with Devise gem, trying to build an API version of it. Implemented more layout, such as Navbar and Footer and a jQuery animation on first click.
