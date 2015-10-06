@@ -6,8 +6,9 @@ class Api::ItemsController < ApplicationController
   def index
     bounds = params[:viewport].split(",")
     unclaimed = params[:unclaimed]
+    ownership = params[:ownership]
     featuresArray = Item.all.each_with_object([]) do |i, array|
-      if within_bounds(i, bounds) && unclaimed_or_not(i, unclaimed)
+      if within_bounds(i, bounds) && unclaimed_or_not(i, unclaimed) && ownership_or_not(i.user_id, ownership)
         array << {type: "Feature", properties: {id: i.id, item: i, claimed: i.claimed}, geometry: {type: "Point", coordinates: [i.longitude.to_f, i.latitude.to_f]}}
       end
     end
@@ -15,7 +16,7 @@ class Api::ItemsController < ApplicationController
   end
 
   def create
-    item = Item.new(item_params)
+    item = current_user.items.new(item_params)
     if images = params[:images]
       images.each do |img|
         item.pictures.new(image: img)
@@ -32,11 +33,16 @@ class Api::ItemsController < ApplicationController
   end
 
   def show
+    if logged_in?
+      user = current_user.id
+    else
+      user = 0
+    end
     item = Item.find(params[:id])
     pictureURLs = item.pictures.each_with_object([]) do |i, array|
       array << i.image.url(:medium)
     end
-    render json: {item: item, pictures: pictureURLs, created_at: item.created_at.strftime("%D - %T")}
+    render json: {item: item, pictures: pictureURLs, created_at: item.created_at.strftime("%D - %T"), owner_id: item.user.id, current_user: user}
   end
 
   def update
@@ -76,6 +82,16 @@ class Api::ItemsController < ApplicationController
       return true
     elsif unclaimed.to_s == 'true'
       if i.claimed.to_s == 'false' # inverted bc unclaimed checkbox, but i.claimed
+        return true
+      end
+    end
+  end
+
+  def ownership_or_not(userId, ownership)#(userId, oBoolean, oId)
+    if ownership.to_s == 'false'
+      return true
+    elsif ownership.to_s == 'true'
+      if current_user.id == userId
         return true
       end
     end

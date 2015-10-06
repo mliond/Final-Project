@@ -145,6 +145,14 @@ Map.prototype.initMap = function() {
   };
 
   // if user clicks checkbox, change data
+  function listenToOwnershipCheckbox() {
+    var ownershipCheckbox = $('input#ownership-checkbox')[0];
+    google.maps.event.addDomListener(ownershipCheckbox, 'change', function() {
+      reloadData();
+    });
+  }
+
+  // if user clicks checkbox, change data
   function listenToUnclaimedCheckbox() {
     var unclaimedCheckbox = $('input#unclaimed-checkbox')[0];
     google.maps.event.addDomListener(unclaimedCheckbox, 'change', function() {
@@ -186,11 +194,13 @@ Map.prototype.initMap = function() {
       toggleDataLayer(false);
     }
     var unclaimedBoolean = $('input#unclaimed-checkbox').is(':checked');
+    var ownershipBoolean = $('input#ownership-checkbox').is(':checked');
+
     var bounds = map.getBounds().toUrlValue();
     var data = $.ajax({
       dataType: "json",
       url: '/api/items',
-      data: {viewport: bounds, unclaimed: unclaimedBoolean},
+      data: {viewport: bounds, unclaimed: unclaimedBoolean, ownership: ownershipBoolean},
       async: false, // needs to load first
       success: showDataLayer
     });
@@ -204,6 +214,7 @@ Map.prototype.initMap = function() {
     reloadData();
     listenToClaim();
     listenToUnclaimedCheckbox();
+    listenToOwnershipCheckbox();
     listenToAutocomplete();
   }
 

@@ -1,3 +1,9 @@
+$('div#edit-button-wrapper').on('click', 'a#edit-item', function(event) {
+  event.preventDefault();
+  $('div#item-info').hide();
+  $('div#edit-item').show();
+})
+
 $('form#edit-item').on('submit', function(event) {
   event.preventDefault();
   var itemId = $('input#item_id').val();

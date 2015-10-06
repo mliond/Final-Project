@@ -34,10 +34,19 @@
               <h5 id="item-claimed">Claimed</h5>
               <button id="claim-button" class="btn btn-default">Claim!</button>
             </div>
-            <!-- Hide if not logged in -->
+            <!-- if logged in -->
+            <% if logged_in? %>
               <div id="wrapper-new-button">
                 <a id="new-button" class="btn btn-default">New!</a>
               </div>
+            <% end %>
+            <!-- if owner -->
+            <div id="edit-button-wrapper">
+            </div>
+            <div id="ownership-checkbox-wrapper">
+              only my items <input type="checkbox" id="ownership-checkbox" data-hook="0">
+            </div>
+
             <div id="claimed-checkbox-wrapper">
               only unclaimed <input type="checkbox" id="unclaimed-checkbox">
             </div>
@@ -68,6 +77,22 @@
             <h1>
               <%= render partial: '/users/form', locals: {form_variable: @user, button_variable: "Sign up"} %>
             </h1>
+          </div>
+          <div id="edit-item">
+            <h1>Edit item</h1>
+
+           <!--  <%= form_for @item, html: {id: "edit-item"} do |f| %>
+              <%= f.hidden_field :id %>
+              <%= f.label :name %>
+              <%= f.text_field :name %>
+              <%= f.label :description %>
+              <%= f.text_field :description %>
+              <%= f.hidden_field :longitude %>
+              <%= f.hidden_field :latitude %>
+              <%= f.label :claimed %>
+              <%= f.check_box :claimed %>
+              <%= f.submit :submit %>
+            <% end %> -->
           </div>
 
       </div>
