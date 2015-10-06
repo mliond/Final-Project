@@ -25,8 +25,6 @@
               </a>
             </div>
 
-
-
             <h5 id="item-name">Name</h5>
             <h5 id="item-description">Description</h5>
             <h5 id="item-location">Location</h5>
@@ -36,9 +34,11 @@
               <h5 id="item-claimed">Claimed</h5>
               <button id="claim-button" class="btn btn-default">Claim!</button>
             </div>
-            <div id="wrapper-new-button">
-              <a id="new-button" class="btn btn-default">New!</a>
-            </div>
+            <% if user_signed_in? %>
+              <div id="wrapper-new-button">
+                <a id="new-button" class="btn btn-default">New!</a>
+              </div>
+            <% end %>
             <div id="claimed-checkbox-wrapper">
               only unclaimed <input type="checkbox" id="unclaimed-checkbox">
             </div>
@@ -66,8 +66,11 @@
             </div>
           </div>
           <div id="login">
-
+            <h1>
+              Please log in:
+            </h1>
           </div>
+
       </div>
 
       </div>
