@@ -1,40 +1,8 @@
 // Gmaps Key: AIzaSyAhrCvig_rV3F4_cO9FUSNpB4eXOE1UMOQ
 
-// Geolocation Object
-var Location = function () {
-  this.options = {enableHighAccuracy: true};
-};
-
-// if browser supports this, geolocate
-Location.prototype.locateUser = function() {
-  if ('geolocation' in navigator) {
-    navigator.geolocation.getCurrentPosition(this.onLocation, this.onError, this.options);
-  } else {
-    this.onError('no browser support');
-  }
-}
-
-Location.prototype.onLocation = function(position) {
-  var coordinates = position.coords
-  Location.coords = coordinates;
-  sessionStorage.setItem('coordinates', coordinates);
-};
-
-// If error, set coordinates to Carrer de Bailen 11, Barcelona
-Location.prototype.onError = function(error) {
-  console.log(error);
-  coordsBarcelona = {latitude: 41.39167454068234, longitude: 2.1771672234719244};
-  Location.coords = coordsBarcelona;
-};
-
-// Locate user
-function locateUser() {
-  // if(!(sessionStorage.getItem('coordinates'))){
-  if(true){
-    var myLocation = new Location;
-    var position = myLocation.locateUser();
-  };
-}
+$(document).ready(function(){
+  initializeMap();
+});
 
 // Initialize Map
 function initializeMap() {
@@ -48,14 +16,11 @@ function initializeMap() {
   $("body").append(s);
 };
 
-$(document).ready(function(){
-  $.when(locateUser()).done([initializeMap()]);
-});
-
 // Map Object
 var Map = function () {
-  this.lat = Location.coords.latitude; // geolocation from before
-  this.lng = Location.coords.longitude; // geolocation from before
+  fallbackCoords = {latitude: 41.39167454068234, longitude: 2.1771672234719244};
+  this.lat = fallbackCoords.latitude; // geolocation from before
+  this.lng = fallbackCoords.longitude; // geolocation from before
   this.mapDiv = document.getElementById('map-index');
   var noPlaces = [ // no POI style for below
   {
@@ -85,6 +50,22 @@ var Map = function () {
 Map.prototype.initMap = function() {
   var map = new google.maps.Map(this.mapDiv, this.mapOptions);
   toggleIdleListener(true);
+
+  // if browser supports Geolocation, initialize it
+  if (navigator.geolocation) {
+    locateUser();
+  }
+
+  // geolocates and sets map center to location
+  function locateUser() {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      map.setCenter(pos);
+    })
+  }
 
   // Show or hide data layer
   function toggleDataLayer(command) {
@@ -128,7 +109,6 @@ Map.prototype.initMap = function() {
       secondDomStyleDataLayer();
     });
   }
-
 
   // Add listener for DOM manipulation on click
   function secondDomStyleDataLayer() {
