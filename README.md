@@ -13,3 +13,5 @@ Day 5: Removed Geocoder gem and implemented Google Maps Geocode instead. Put aut
 Day 6: Played around with Devise gem, trying to build an API version of it. Implemented more layout, such as Navbar and Footer and a jQuery animation on first click. Wrote mailers for signup and weekly digest, but only implemented signup.
 
 Day 7: Used Google geolocalization (less code), implemented users (with bcrypt + sessions), items belong to users who are allowed to edit their own ones. Adapted frontend to these changes. Successfully deployed to Heroku.
+
+Day 8: Used Figaro gem for ENV variables (for Gmaps and AWS). Put in loading screen and UI block during Ajax call. Now storing pictures on AWS through paperclip. A bunch of frontend changes.
