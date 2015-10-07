@@ -32,9 +32,13 @@ gem 'bcrypt', '~> 3.1.7'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-# Picture through Paperclip and remotipart
+# Picture through Paperclip and remotipart. Storing Pics on AWS.
 gem "paperclip", "~> 4.3"
 gem 'remotipart', '~> 1.2.1'
+gem 'aws-sdk', '< 2.0'
+
+# Use figaro for API keys
+gem 'figaro'
 
 # rails_12factor for Heroku deployment
 gem 'rails_12factor'
@@ -47,8 +51,6 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'pry'
-
-
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
