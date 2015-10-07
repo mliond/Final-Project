@@ -12,6 +12,7 @@ $('form#new-item').on('submit', function(event) {
   // var file = fileInput.files[0];
   // formData.append('image', file);
   $('div#form-error').hide();
+  $.blockUI({ message: "<div class='spinner'></div>", css: { backgroundColor: 'none', border: 0} });
 
   $.ajax({
     url: '/api/items',
@@ -33,9 +34,11 @@ function _successOnSubmission(data) {
   $('div#item-info').show();
   var dataView = new Event('dataView');
   myForm.dispatchEvent(dataView);
+  $.unblockUI();
 }
 
 function _errorOnSubmission(data) {
+  $.unblockUI();
   $('div#form-error').text(data.responseJSON.error);
   $('div#form-error').fadeIn('slow');
 }
