@@ -10,6 +10,6 @@ Day 4: Refactored JS, added Autocomplete form, map only loads viewport, toggle b
 
 Day 5: Removed Geocoder gem and implemented Google Maps Geocode instead. Put autocomplete location into the map, which can move the marker. Created picture model, which belongs to item, therefore enabling multiple pictures. Minor: Used lower quality images for faster loading. Implemented Bootstrap Caroussel for pictures.
 
-Day 6: Played around with Devise gem, trying to build an API version of it. Implemented more layout, such as Navbar and Footer and a jQuery animation on first click.
+Day 6: Played around with Devise gem, trying to build an API version of it. Implemented more layout, such as Navbar and Footer and a jQuery animation on first click. Wrote mailers for signup and weekly digest, but only implemented signup.
 
 Day 7: Used Google geolocalization (less code), implemented users (with bcrypt + sessions), items belong to users who are allowed to edit their own ones. Adapted frontend to these changes. Successfully deployed to Heroku.
