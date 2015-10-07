@@ -8,7 +8,7 @@
 
 puts 'started (nothing destroyed)'
 
-userNum = 2
+userNum = 1
 itemNum = 3
 
 userNum.times do |u|
