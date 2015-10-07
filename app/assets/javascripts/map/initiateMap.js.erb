@@ -103,10 +103,14 @@ Map.prototype.initMap = function() {
   function domStyleDataLayer() {
     var returned = google.maps.event.addListenerOnce(Map.dataLayer, 'click', function(event) {
       changeDom(event);
-      $('div#item-wrapper').fadeIn('slow');
-      $("div.col-lg-12").attr('class', 'col-lg-7');
+      showLeftSide();
       secondDomStyleDataLayer();
     });
+  }
+
+  function showLeftSide() {
+    $('div#item-wrapper').fadeIn('slow');
+    $("div.col-lg-12").attr('class', 'col-lg-7');
   }
 
   // Add listener for DOM manipulation on click
@@ -286,6 +290,7 @@ Map.prototype.initMap = function() {
   // When clicking the new button, remove data layer, add draggable marker
   var newButton = $('a#new-button')[0];
   google.maps.event.addDomListener(newButton, 'click', function() {
+    showLeftSide();
     toggleDataLayer(false);
     toggleIdleListener(false);
     Map.marker = createNewMarker();

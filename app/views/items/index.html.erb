@@ -34,22 +34,10 @@
               <h5 id="item-claimed">Claimed</h5>
               <button id="claim-button" class="btn btn-default">Claim!</button>
             </div>
-            <!-- if logged in -->
-            <% if logged_in? %>
-              <div id="wrapper-new-button">
-                <a id="new-button" class="btn btn-default">New!</a>
-              </div>
-            <% end %>
             <!-- if owner -->
             <div id="edit-button-wrapper">
             </div>
-            <div id="ownership-checkbox-wrapper">
-              only my items <input type="checkbox" id="ownership-checkbox" data-hook="0">
-            </div>
 
-            <div id="claimed-checkbox-wrapper">
-              only unclaimed <input type="checkbox" id="unclaimed-checkbox">
-            </div>
           </div>
           <div id="new-item">
             <h1>Create new item <%= @item.id %></h1>
@@ -107,11 +95,3 @@
       </div>
     </div>
   </div>
-
-<footer>
-  <div class="container">
-    <div class="row">
-      Footer
-    </div>
-  </div>
-</footer>

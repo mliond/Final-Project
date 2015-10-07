@@ -1,13 +1,33 @@
 <nav class="navbar navbar-default navbar-static-top">
   <div class="container">
     <ul class="nav navbar-nav navbar-left">
-      <li><a href="">Hello</a></li>
+      <li><%= link_to "Hello", root_path %></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li><%= link_to "Map", items_path %></li>
-      <li><%= link_to "Sign in", "#", id: "login" %></li>
+
+    <li class="dropdown">
+       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Map <span class="caret"></span></a>
+       <ul class="dropdown-menu">
+         <li><%= link_to "Reload map", root_path %></li>
+         <li><a href="#">only unclaimed <input type="checkbox" id="unclaimed-checkbox"></a></li>
+         <% if logged_in? %>
+         <li><a href="#">Only mine <input type="checkbox" id="ownership-checkbox" data-hook="0"></a></li>
+         <% end %>
+       </ul>
+     </li>
+
+      <% if logged_in? %>
+        <li><%= link_to "New Item", "#", id: "new-button" %></li>
+      <% end %>
+
        <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login <span class="caret"></span></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+        <% if logged_in? %>
+          Logged in
+        <% else %>
+          Login
+        <% end %>
+        <span class="caret"></span></a>
         <ul class="dropdown-menu">
         <!-- Hide when not logged in -->
           <% if logged_in? %>
@@ -19,33 +39,29 @@
               <%= link_to "Log out", logout_path, method: 'DELETE' %>
             </li>
           <% else %>
-            <li>
-              New user
-            </li>
-            <li>
+
               <%= form_for(:session, url: login_path) do |f| %>
 
-                <div class="field">
+                <li>
                 <%= f.label :email %><br>
                 <%= f.text_field :email %>
-                </div>
+                </li>
 
-                 <div class="field">
+                <li>
                 <%= f.label :password %><br>
                 <%= f.password_field :password %>
-                </div>
+                </li>
 
-                <div class="field">
+                <li>
                 <%= f.submit "Login" %>
-                </div>
-
+                </li>
               <% end %>
-            </li>
-          <% end %>
 
-            <li>
-            </li>
-            <li><%= link_to "Sign up", new_user_path %></li>
+              <li role="separator" class="divider"></li>
+              <li>
+                <%= link_to "Sign up", new_user_path %>
+              </li>
+            <% end %>
         </ul>
       </li>
     </ul>

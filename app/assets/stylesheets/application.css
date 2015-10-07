@@ -19,8 +19,18 @@ html {
 }
 
 body {
-  height: 100%;
   /*overflow: hidden;*/
+}
+
+body {
+  /*height: 100%;*/
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
 }
 
 div#item-wrapper {
@@ -28,8 +38,8 @@ div#item-wrapper {
 }
 
 #map {
-  height: 80%;
-  width: 80%;
+  /*height: 80%;*/
+  /*width: 80%;*/
 }
 
 h5#item-claimed, h5#item-id, h5#item-owner-id {
@@ -43,6 +53,10 @@ button#claim-button {
 img#item-image {
   max-height: 35%;
   width: 100%;
+}
+
+.carousel-inner > .item > img {
+    margin: 0 auto;
 }
 
 div#new-item, div#map-new-item, div#edit-item {
@@ -68,9 +82,13 @@ div#search-address {
   padding-top: 20px;
 }
 
+.row {
+  margin: auto;
+}
+
 footer {
-  background-color: grey;
-  height: 60px;
+  background-color: #738994;
+  height: 40px;
   color: white;
   position: fixed;
   bottom: 0;
