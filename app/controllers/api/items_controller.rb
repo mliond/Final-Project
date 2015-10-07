@@ -15,30 +15,30 @@ class Api::ItemsController < ApplicationController
     render json: {type: "FeatureCollection", features: featuresArray}
   end
 
-  # def create
-  #   item = current_user.items.new(item_params)
-  #   if images = params[:images]
-  #     images.each do |img|
-  #       item.pictures.new(image: img)
-  #     end
-  #   else
-  #     render json: {error: "please attach pictures"}, status: 403
-  #     return
-  #   end
-  #   unless item.save
-  #     render json: {item: item, error: "please enter a name and description"}, status: 403
-  #     return
-  #   end
-  #   render json: item
-  # end
-
   def create
-    item = current_user.items.create(item_params)
-    params[:images].each do |img|
-        item.pictures.create(image: img)
+    item = current_user.items.new(item_params)
+    if images = params[:images]
+      images.each do |img|
+        item.pictures.new(image: img)
+      end
+    else
+      render json: {error: "please attach pictures"}, status: 403
+      return
+    end
+    unless item.save
+      render json: {item: item, error: "please enter a name and description"}, status: 403
+      return
     end
     render json: item
   end
+
+  # def create
+  #   item = current_user.items.create(item_params)
+  #   params[:images].each do |img|
+  #       item.pictures.create(image: img)
+  #   end
+  #   render json: item
+  # end
 
   def show
     if logged_in?
