@@ -38,18 +38,19 @@ userNum.times do |u|
     # create pictures each
     images = ["http://firstchoicecarpetcleaners.com/wp-content/uploads/2013/10/UNTE_200252079_3000.jpeg", "http://cdn.nest.co.uk/product-media/7MX/800/600/SCP-Oscar-Armchair.jpg", "http://www.southdownsleisure.co.uk/wp-content/uploads/2014/06/antiques.png", "http://overmental.com/wp-content/uploads/2015/03/video-game-controllers.jpg", "http://designerchaircoverstogo.com/decor/wp-content/uploads/2012/04/banquet-chairs.jpg", "https://iconicinteriors.com/images/uploads/products/buy-barcelona-chair-vintage.jpg"]
 
-    img1 = images[rand(0..(images.count -1))]
+    # img1 = images[rand(0..(images.count -1))]
+    img1= "http://cdn.nest.co.uk/product-media/7MX/800/600/SCP-Oscar-Armchair.jpg"
     pic1 = item.pictures.create()
     pic1.picture_from_url(img1)
-    puts "created picture no #{pic1.id}"
-    img2 = images[rand(0..(images.count - 1))]
-    pic2 = item.pictures.create()
-    pic2.picture_from_url(img2)
-    puts "created picture no #{pic2.id}"
-    img3 = images[rand(0..(images.count - 1))]
-    pic3 = item.pictures.create()
-    pic3.picture_from_url(img3)
-    puts "created picture no #{pic3.id}"
+    # puts "created picture no #{pic1.id}"
+    # img2 = images[rand(0..(images.count - 1))]
+    # pic2 = item.pictures.create()
+    # pic2.picture_from_url(img2)
+    # puts "created picture no #{pic2.id}"
+    # img3 = images[rand(0..(images.count - 1))]
+    # pic3 = item.pictures.create()
+    # pic3.picture_from_url(img3)
+    # puts "created picture no #{pic3.id}"
   end
 end
 
