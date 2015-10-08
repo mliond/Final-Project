@@ -4,17 +4,22 @@
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
 
+img.logo-image {
+  height: 100px;
+  margin-bottom: 15px;
+}
+
 span.threesteps {
   font-size: 50px;
   color: red;
 }
 
 span.glyphicon-heart {
-  color: orange;
+  color: #eb3812;
 }
 
 span.glyphicon-lamp {
-  color: gray;
+  color: #222;
 }
 
 span.glyphicon-map-marker {
@@ -32,7 +37,7 @@ body {
 }
 
 hr {
-    max-width: 50px;
+    max-width: 200px;
     border-color: #f05f40;
     border-width: 3px;
 }

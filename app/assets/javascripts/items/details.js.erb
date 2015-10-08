@@ -41,12 +41,20 @@ function _emptyTheHTML() {
 
 function _putFirstPictureOnDom(img) {
   $('#item-info ol.carousel-indicators').append('<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>');
-  $('#item-info div.carousel-inner').append('<div class="item active"><img src="'+img+'" alt="..."><div class="carousel-caption">..Caption..</div>');
+  var image = '<div class="item active"><img src="'+img+'" alt="..."></div>';
+  $('#item-info div.carousel-inner').append(image);
+  // -> Dont have any captions right now. If you add captions again, remove last </div> in image
+  // var caption = '<div class="carousel-caption">..Caption..</div>';
+  // $('#item-info div.carousel-inner').append(image + caption);
 }
 
 function _putPicturesOnDom(img, i) {
   $('#item-info ol.carousel-indicators').append('<li data-target="#carousel-example-generic" data-slide-to="1"></li>')
-  $('#item-info div.carousel-inner').append('<div class="item"><img src="'+img+'" alt="..."><div class="carousel-caption">Caption</div></div>')
+  var image = '<div class="item"><img src="'+img+'" alt="..."></div>';
+  $('#item-info div.carousel-inner').append(image);
+  // -> Dont have any captions right now. If you add captions again, remove last </div> in image
+  // var caption = '<div class="carousel-caption">Caption</div></div>'
+  // $('#item-info div.carousel-inner').append(image + caption);
 }
 
 function _putTextOnDom(item, createdAt, ownerId, currentUser) {
@@ -58,9 +66,9 @@ function _putTextOnDom(item, createdAt, ownerId, currentUser) {
   $('h5#item-id').text(item.id);
   $('input#ownership-checkbox').attr('data-hook', currentUser);
   if((currentUser === ownerId)&&(currentUser !== 0))  {
-    $('div#edit-button-wrapper').html('<a href="#" class="btn btn-default" id="edit-item">Edit</a>');
+    $('span#edit-button-wrapper').html('<a href="#" class="btn btn-default" id="edit-item">Edit</a>');
   } else {
-    $('div#edit-button-wrapper').empty();
+    $('span#edit-button-wrapper').empty();
   };
   if($('h5#item-claimed').text() === 'false') {
     $('button#claim-button').css('display', 'block');
