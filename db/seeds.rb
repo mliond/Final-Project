@@ -9,7 +9,7 @@
 puts 'started (nothing destroyed)'
 
 userNum = 3
-itemNum = 5
+itemNum = 10
 
 userNum.times do |u|
   # create user

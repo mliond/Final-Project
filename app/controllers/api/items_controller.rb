@@ -48,7 +48,7 @@ class Api::ItemsController < ApplicationController
     end
     item = Item.find(params[:id])
     pictureURLs = item.pictures.each_with_object([]) do |i, array|
-      array << i.image.url(:medium)
+      array << i.image.url
     end
     render json: {item: item, pictures: pictureURLs, created_at: item.created_at.strftime("%D - %T"), owner_id: item.user.id, current_user: user}
   end
