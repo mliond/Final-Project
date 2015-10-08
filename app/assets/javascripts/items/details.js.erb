@@ -50,10 +50,10 @@ function _putPicturesOnDom(img, i) {
 }
 
 function _putTextOnDom(item, createdAt, ownerId, currentUser) {
-  $('h5#item-name').text(item.name);
-  $('h5#item-description').text(item.description);
-  $('h5#item-location').text(item.location);
-  $('h5#item-created_at').text(createdAt);
+  $('p#item-name').text(item.name);
+  $('p#item-description').text(item.description);
+  $('p#item-location').text(item.location);
+  $('p#item-created_at').text(createdAt);
   $('h5#item-claimed').text(item.claimed);
   $('h5#item-id').text(item.id);
   $('input#ownership-checkbox').attr('data-hook', currentUser);

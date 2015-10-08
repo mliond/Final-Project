@@ -1,5 +1,8 @@
 class ItemsController < ApplicationController
 
+  def home
+  end
+
   def index
     @item = Item.new
     @user = User.new

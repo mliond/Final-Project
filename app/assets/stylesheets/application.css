@@ -14,6 +14,10 @@
  *= require_self
  */
 
+h1#form-heading {
+  margin-bottom: 25px;
+}
+
 html {
   height: 100%;
 }
@@ -86,11 +90,31 @@ div#search-address {
   margin: auto;
 }
 
-footer {
+footer.map {
   background-color: #738994;
   height: 40px;
   color: white;
   position: fixed;
   bottom: 0;
   width: 100%;
+}
+
+footer.landing-page {
+    padding: 25px 0;
+    text-align: center;
+}
+
+footer.landing-page span.copyright {
+    text-transform: uppercase;
+    text-transform: none;
+    font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 40px;
+}
+
+footer.landing-page ul.quicklinks {
+    margin-bottom: 0;
+    text-transform: uppercase;
+    text-transform: none;
+    font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 40px;
 }

@@ -275,8 +275,8 @@ Map.prototype.initMap = function() {
   }
 
   function changeLocationForm(coordinates){
-    $('input#item_longitude').val(coordinates.L);
-    $('input#item_latitude').val(coordinates.H);
+    $('input#item_longitude').val(coordinates.lng());
+    $('input#item_latitude').val(coordinates.lat());
   }
 
   // Add listeners for geocoding

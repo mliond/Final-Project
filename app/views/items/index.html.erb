@@ -3,7 +3,10 @@
       <div id="item-wrapper">
         <div class="col-lg-5">
           <div id="item-info">
-            <div id="carousel-item" class="carousel slide" data-ride="carousel" data-interval="false">
+
+
+            <div class="panel panel-default">
+              <div class="panel-thumbnail"><div id="carousel-item" class="carousel slide" data-ride="carousel" data-interval="false">
               <!-- Indicators -->
               <ol class="carousel-indicators">
                 <!-- Add here -->
@@ -24,35 +27,63 @@
                 <span class="sr-only">Next</span>
               </a>
             </div>
-
-            <h5 id="item-name">Name</h5>
-            <h5 id="item-description">Description</h5>
-            <h5 id="item-location">Location</h5>
-            <h5 id="item-created_at">Created</h5>
-            <div id="claim-button">
-              <h5 id="item-id">Id</h5>
-              <h5 id="item-claimed">Claimed</h5>
-              <button id="claim-button" class="btn btn-default">Claim!</button>
             </div>
+              <div class="panel-body">
+                <p class="lead" id="item-name">Name</p>
+                <p id="item-description">Description</p>
+                <!-- <p id="item-location">Location</p> -->
+                <p id="item-created_at">Created</p>
+                <p>
+                  <h5 id="item-id">Id</h5>
+                  <h5 id="item-claimed">Claimed</h5>
+                  <button id="claim-button" class="btn btn-default">Claim!</button>
+                </p>
+                <p>
+                  <img src="http://api.randomuser.me/portraits/med/women/4.jpg" height="28px">
+                  <img src="http://api.randomuser.me/portraits/med/men/4.jpg" width="28px" height="28px">
+                </p>
+              </div>
+            </div>
+
+
             <!-- if owner -->
             <div id="edit-button-wrapper">
             </div>
 
           </div>
           <div id="new-item">
-            <h1>Create new item <%= @item.id %></h1>
+            <h1 id="form-heading">Create new item <%= @item.id %></h1>
             <div id="form-error">
               <h5 id="error-message">Error message</h5>
             </div>
-            <%= form_for @item, html: {id: "new-item", multipart: true} do |f| %>
-              <%= f.label :name %>
-              <%= f.text_field :name %>
-              <%= f.label :description %>
-              <%= f.text_field :description %>
-              <%= f.hidden_field :longitude %>
-              <%= f.hidden_field :latitude %>
+            <%= form_for @item, html: {id: "new-item", multipart: true, class: "form-horizontal"} do |f| %>
+            <div class="form-group">
+              <%= f.label :name, class: "col-sm-3" %>
+              <div class="col-sm-9">
+                <%= f.text_field :name, html: {placeholder: "Name..", class: "form-control"} %>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :description, class: "col-sm-3" %>
+              <div class="col-sm-9">
+              <%= f.text_area :description, html: {placeholder: "Description..", class: "form-control"}  %>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.hidden_field :longitude, id: "item_longitude" %>
+              <%= f.hidden_field :latitude, id: "item_latitude" %>
+            </div>
+            <div class="form-group">
+              <%= f.label "Images", class: "col-sm-3" %>
+              <div class="col-sm-9">
               <%= file_field_tag "images[]", type: :file, multiple: true %>
-              <%= f.submit :submit, id: "submit-item" %>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-3 col-sm-9">
+                <%= f.submit :submit, id: "submit-item" %>
+              </div>
+            </div>
             <% end %>
 
             <div id="search-address">
@@ -95,3 +126,5 @@
       </div>
     </div>
   </div>
+
+
