@@ -8,8 +8,8 @@
 
 puts 'started (nothing destroyed)'
 
-userNum = 3
-itemNum = 10
+userNum = 10
+itemNum = 30
 
 userNum.times do |u|
   # create user
