@@ -36,7 +36,7 @@ userNum.times do |u|
     puts "created item no #{item.id}"
 
     # create pictures each
-    images = ["http://firstchoicecarpetcleaners.com/wp-content/uploads/2013/10/UNTE_200252079_3000.jpeg", "http://cdn.nest.co.uk/product-media/7MX/800/600/SCP-Oscar-Armchair.jpg", "http://www.southdownsleisure.co.uk/wp-content/uploads/2014/06/antiques.png", "http://overmental.com/wp-content/uploads/2015/03/video-game-controllers.jpg", "http://designerchaircoverstogo.com/decor/wp-content/uploads/2012/04/banquet-chairs.jpg", "https://iconicinteriors.com/images/uploads/products/buy-barcelona-chair-vintage.jpg"]
+    images = ["http://firstchoicecarpetcleaners.com/wp-content/uploads/2013/10/UNTE_200252079_3000.jpeg", "http://cdn.nest.co.uk/product-media/7MX/800/600/SCP-Oscar-Armchair.jpg", "http://www.southdownsleisure.co.uk/wp-content/uploads/2014/06/antiques.png", "http://overmental.com/wp-content/uploads/2015/03/video-game-controllers.jpg", "https://iconicinteriors.com/images/uploads/products/buy-barcelona-chair-vintage.jpg"]
 
     # img1 = images[rand(0..(images.count -1))]
     img1= images[rand(0..(images.count - 1))]
