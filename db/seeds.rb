@@ -8,8 +8,8 @@
 
 puts 'started (nothing destroyed)'
 
-userNum = 1
-itemNum = 3
+userNum = 3
+itemNum = 5
 
 userNum.times do |u|
   # create user
@@ -22,32 +22,35 @@ userNum.times do |u|
   puts "created user no #{u.id}"
 
   #create items each
+
+  names = ["A red couch", "A blue armchair", "An old lamp", "Silverware for an entire family!", "New chairs", "Old videogames", "A broken toilet"]
+  description = ["This item has been with my family for years. Now I am giving it away for free. Come and get it!", "We loved this old thing and hope it will make someone as happy as it made us!"]
   itemNum.times do |i|
-    random = RandomLocation.near_by(41.38506, 2.17340, 25000)
+    random = RandomLocation.near_by(41.392705, 2.146386, 3640)
     item = u.items.create({
-      name: Faker::Name.name,
-      description: Faker::Hacker.say_something_smart,
+      name: names[rand(0..(names.count - 1))],
+      description: description[rand(0..(description.count - 1))],
       latitude: random[0],
       longitude: random[1]
     })
     puts "created item no #{item.id}"
 
     # create pictures each
-    # img1 = File.open("/Users/markus/downloads/Testpics/gif-#{rand(1..15)}.gif")
-    # img2 = File.open("/Users/markus/downloads/Testpics/gif-#{rand(1..15)}.gif")
-    # pic1 = item.pictures.create({image: img1})
-    # puts "created picture no #{pic1.id}"
-    # pic2 = item.pictures.create({image: img2})
-    # puts "created picture no #{pic2.id}"
-    img1 = "https://media.giphy.com/media/i03O15D50joLS/giphy.gif"
+    images = ["http://firstchoicecarpetcleaners.com/wp-content/uploads/2013/10/UNTE_200252079_3000.jpeg", "http://cdn.nest.co.uk/product-media/7MX/800/600/SCP-Oscar-Armchair.jpg", "http://www.southdownsleisure.co.uk/wp-content/uploads/2014/06/antiques.png", "http://overmental.com/wp-content/uploads/2015/03/video-game-controllers.jpg", "http://designerchaircoverstogo.com/decor/wp-content/uploads/2012/04/banquet-chairs.jpg", "https://iconicinteriors.com/images/uploads/products/buy-barcelona-chair-vintage.jpg"]
+
+    img1 = images[rand(0..(images.count -1))]
     pic1 = item.pictures.create()
     pic1.picture_from_url(img1)
     puts "created picture no #{pic1.id}"
-    img2 = "https://media.giphy.com/media/If3pitjg4oDYs/giphy.gif"
+    img2 = images[rand(0..(images.count - 1))]
     pic2 = item.pictures.create()
     pic2.picture_from_url(img2)
     puts "created picture no #{pic2.id}"
+    img3 = images[rand(0..(images.count - 1))]
+    pic3 = item.pictures.create()
+    pic3.picture_from_url(img3)
+    puts "created picture no #{pic3.id}"
   end
 end
 
-puts "-> created #{userNum} new users with #{itemNum} items with 2 pictures each."
+puts "-> created #{userNum} new users with #{itemNum} items with 3 pictures each."
