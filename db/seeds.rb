@@ -26,7 +26,7 @@ userNum.times do |u|
   names = ["A red couch", "A blue armchair", "An old lamp", "Silverware for an entire family!", "New chairs", "Old videogames", "A broken toilet"]
   description = ["This item has been with my family for years. Now I am giving it away for free. Come and get it!", "We loved this old thing and hope it will make someone as happy as it made us!"]
   itemNum.times do |i|
-    random = RandomLocation.near_by(41.392705, 2.146386, 3640)
+    random = RandomLocation.near_by(41.391711, 2.176939, 1730)
     item = u.items.create({
       name: names[rand(0..(names.count - 1))],
       description: description[rand(0..(description.count - 1))],
