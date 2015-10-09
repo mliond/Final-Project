@@ -32,14 +32,6 @@ class Api::ItemsController < ApplicationController
     render json: item
   end
 
-  # def create
-  #   item = current_user.items.create(item_params)
-  #   params[:images].each do |img|
-  #       item.pictures.create(image: img)
-  #   end
-  #   render json: item
-  # end
-
   def show
     if logged_in?
       user = current_user.id
